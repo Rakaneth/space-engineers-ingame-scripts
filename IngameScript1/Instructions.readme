@@ -1,0 +1,36 @@
+﻿Rakaneth's AutoAssembler v2.1
+-----------
+
+-Use the following INI template for the programmable block's custom data.
+Remove rows with unwanted components.
+-Add "Factory" to the name of any assemblers you want to be used for auto-production.
+-Add "Factory Display" to the name of any LCDs you want to output information about
+what is currently in production. This info is always displayed on the programmable
+block itself.
+-Recompile after any configuration change; the script will not update for new blocks
+or configuration change.
+-DO NOT change any text in the script. All customization is done through naming and the
+PB's custom data.
+
+[Stocks]
+BulletproofGlass=0
+Computer=0
+ConstructionComp=0
+DetectorComp=0
+Display=0
+Girder=0
+InteriorPlate=0
+LargeTube=0
+MedicalComp=0
+MetalGrid=0
+Motor=0
+PowerCell=0
+RadioComm=0
+ReactorComp=0
+SmallTube=0
+SolarCell=0
+SteelPlate=0
+BigNato=0
+SmallNato=0
+ThrusterComp=0
+---
