@@ -338,3 +338,9 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# MDK paths
+**/MDK/MDK.paths.props
+
+# backup zips
+*.zip
