@@ -19,6 +19,7 @@ using VRageMath;
 
 namespace IngameScript
 {
+    //comment
     partial class Program : MyGridProgram
     {
         MyIni ini = new MyIni();
