@@ -136,7 +136,7 @@ namespace IngameScript
                     if (showAll)
                     {
                         sb.Append($"{batt.CustomName}: {batt.CurrentStoredPower:N4} / {batt.MaxStoredPower:N4} MWh ");
-                        sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, 20, bar, dash)}]");
+                        sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, 20, bar, dash)}]\n");
                     }
                 }
 
