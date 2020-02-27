@@ -78,6 +78,12 @@ namespace IngameScript
                 lines = sb.ToString().Split('\n').ToList();
             }
 
+            public void FromString(string s)
+            {
+                Clear();
+                lines = s.Split('\n').ToList();
+            }
+
             public void Paginate(IMyTextPanel display)
             {
                 StringBuilder sb = new StringBuilder();
@@ -105,6 +111,8 @@ namespace IngameScript
                     curPage = (curPage + 1) % pages.Count;
                 }
             }
+
+            public string Page(int index) => pages[index];
         }
     }
 }

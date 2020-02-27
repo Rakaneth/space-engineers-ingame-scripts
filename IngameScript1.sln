@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IGCTestClient", "IGCTestCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarRotation", "SolarRotation\SolarRotation.csproj", "{644DE716-04FC-4065-B2DB-0276CD25E6D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiLCDDisplay", "MultiLCDDisplay\MultiLCDDisplay.csproj", "{93208769-AC73-4299-A6A3-1C64CD05B5B2}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -35,6 +37,7 @@ Global
 		Definitions\Definitions.projitems*{676b2ac1-6aa7-4493-86da-6d2bee4e528f}*SharedItemsImports = 4
 		Definitions\Definitions.projitems*{6e7fcefc-9535-4bd7-a988-6a6114ff4f07}*SharedItemsImports = 4
 		DisplayUtils\DisplayUtils.projitems*{7fa65dcf-2726-471f-8563-cfc53d529f1b}*SharedItemsImports = 13
+		DisplayUtils\DisplayUtils.projitems*{93208769-ac73-4299-a6a3-1c64cd05b5b2}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -60,6 +63,8 @@ Global
 		{F0C9B28F-D6D0-4047-813F-84B7B49C99AB}.Debug|x64.Build.0 = Debug|x64
 		{644DE716-04FC-4065-B2DB-0276CD25E6D6}.Debug|x64.ActiveCfg = Debug|x64
 		{644DE716-04FC-4065-B2DB-0276CD25E6D6}.Debug|x64.Build.0 = Debug|x64
+		{93208769-AC73-4299-A6A3-1C64CD05B5B2}.Debug|x64.ActiveCfg = Debug|x64
+		{93208769-AC73-4299-A6A3-1C64CD05B5B2}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
