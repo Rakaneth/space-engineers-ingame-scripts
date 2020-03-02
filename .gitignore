@@ -340,7 +340,7 @@ ASALocalRun/
 healthchecksdb
 
 # MDK paths
-**/MDK/MDK.paths.props
+**/MDK
 
 # backup zips
 *.zip
