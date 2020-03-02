@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IGCTestClient", "IGCTestCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarRotation", "SolarRotation\SolarRotation.csproj", "{644DE716-04FC-4065-B2DB-0276CD25E6D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirlockDoors", "AirlockDoors\AirlockDoors.csproj", "{6CA75716-450F-40A4-9D8B-02EA1A505E95}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -60,6 +62,8 @@ Global
 		{F0C9B28F-D6D0-4047-813F-84B7B49C99AB}.Debug|x64.Build.0 = Debug|x64
 		{644DE716-04FC-4065-B2DB-0276CD25E6D6}.Debug|x64.ActiveCfg = Debug|x64
 		{644DE716-04FC-4065-B2DB-0276CD25E6D6}.Debug|x64.Build.0 = Debug|x64
+		{6CA75716-450F-40A4-9D8B-02EA1A505E95}.Debug|x64.ActiveCfg = Debug|x64
+		{6CA75716-450F-40A4-9D8B-02EA1A505E95}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

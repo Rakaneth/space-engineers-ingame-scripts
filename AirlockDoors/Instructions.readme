@@ -1,0 +1,21 @@
+﻿Rakaneth's Airlock Manager v1.0
+-----------
+
+Customization:
+To set up the airlock functionality, mark pairs of doors in Custom Data as follows:
+
+<identifier> -inner
+OR
+<identifier> -outer
+
+Examples: 
+A -inner
+A -outer
+
+The CustomData of airlock doors must not contain any other data.
+The identifier can be any single word or quoted string (necessary if the identifier has spaces).
+Doors with the same identifier are paired if one is marked -inner and the other is marked -outer.
+If one is open, the other will close and become disabled.
+All doors will close upon script recompliation.
+Multiple door pairs may not have the same identifier.
+Script must be recompiled if any changes are made to door blocks or configuration.
