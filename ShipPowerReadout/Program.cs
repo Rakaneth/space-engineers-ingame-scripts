@@ -37,6 +37,7 @@ namespace IngameScript
         MyCommandLine cmd = new MyCommandLine();
         const char bar = '\u2588';
         const char dash = '-';
+        IMyProgrammableBlock displayController;
         
 
         public Program()
@@ -49,8 +50,10 @@ namespace IngameScript
             GridTerminalSystem.GetBlocksOfType(oxyTanks, o => o.IsSameConstructAs(Me) && o.Capacity == 100000f);
             GridTerminalSystem.GetBlocksOfType(reactors, r => r.IsSameConstructAs(Me));
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
+            displayController = GridTerminalSystem.GetBlockWithName("Display Controller") as IMyProgrammableBlock;
+
            
-            if (displays.Count == 0 && cockpits.Count == 0)
+            if (displays.Count == 0 && cockpits.Count == 0 && displayController == null)
                 throw new Exception("Remember to add [PowerReadout] to the Custom Data of any displays or cockpits you want to show this information.");
 
             foreach (var display in displays)
@@ -133,7 +136,7 @@ namespace IngameScript
                     if (showAll)
                     {
                         sb.Append($"{batt.CustomName}: {batt.CurrentStoredPower:N4} / {batt.MaxStoredPower:N4} MWh ");
-                        sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, 20, bar, dash)}]");
+                        sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, 20, bar, dash)}]\n");
                     }
                 }
 
@@ -193,7 +196,8 @@ namespace IngameScript
 
             foreach (var cockpit in cockpits)
                 cockpit.GetSurface(0).WriteText(sb);
-                
+
+            displayController?.TryRun(sb.ToString());
 
             sb.Clear();
         }
