@@ -78,6 +78,7 @@ namespace IngameScript
             public readonly MyItemType smallTube = new MyItemType(compBase, "SmallTube");
             public readonly MyItemType solarCell = new MyItemType(compBase, "SolarCell");
             public readonly MyItemType steelPlate = new MyItemType(compBase, "SteelPlate");
+            public readonly MyItemType superConductor = new MyItemType(compBase, "Superconductor");
             public readonly MyItemType thrusterComp = new MyItemType(compBase, "Thrust");
 
             public readonly MyItemType bigNato = new MyItemType(ammoBase, "NATO_25x184mm");
@@ -102,6 +103,7 @@ namespace IngameScript
             public readonly MyDefinitionId smallTubeBP = MyDefinitionId.Parse($"{bpBase}/SmallTube");
             public readonly MyDefinitionId solarCellBP = MyDefinitionId.Parse($"{bpBase}/SolarCell");
             public readonly MyDefinitionId steelPlateBP = MyDefinitionId.Parse($"{bpBase}/SteelPlate");
+            public readonly MyDefinitionId superConductorBP = MyDefinitionId.Parse($"{bpBase}/Superconductor");
             public readonly MyDefinitionId thrusterBP = MyDefinitionId.Parse($"{bpBase}/ThrustComponent");
 
             public readonly MyDefinitionId electricity = MyDefinitionId.Parse($"{gasBase}/Electricity");
@@ -130,6 +132,7 @@ namespace IngameScript
                 defTable.Add("SteelPlate", new ItemInfo(steelPlate, steelPlateBP));
                 defTable.Add("BigNato", new ItemInfo(bigNato, bigNatoBP));
                 defTable.Add("SmallNato", new ItemInfo(smallNato, smallNatoBP));
+                defTable.Add("Superconductor", new ItemInfo(superConductor, superConductorBP));
                 defTable.Add("ThrusterComp", new ItemInfo(thrusterComp, thrusterBP));
             }
 
