@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolarRotation", "SolarRotat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiLCDDisplay", "MultiLCDDisplay\MultiLCDDisplay.csproj", "{93208769-AC73-4299-A6A3-1C64CD05B5B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneTargeting", "DroneTargeting\DroneTargeting.csproj", "{F0B901D4-AF77-4A81-A4E0-F5160088D2D2}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DroneCommands", "DroneCommands\DroneCommands.shproj", "{BCCEC4B9-C578-4522-A809-B1A05A9E359F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneCommander", "DroneCommander\DroneCommander.csproj", "{F0A11506-1B5F-4356-A560-4764B9077646}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -38,6 +44,9 @@ Global
 		Definitions\Definitions.projitems*{6e7fcefc-9535-4bd7-a988-6a6114ff4f07}*SharedItemsImports = 4
 		DisplayUtils\DisplayUtils.projitems*{7fa65dcf-2726-471f-8563-cfc53d529f1b}*SharedItemsImports = 13
 		DisplayUtils\DisplayUtils.projitems*{93208769-ac73-4299-a6a3-1c64cd05b5b2}*SharedItemsImports = 4
+		DroneCommands\DroneCommands.projitems*{bccec4b9-c578-4522-a809-b1a05a9e359f}*SharedItemsImports = 13
+		DroneCommands\DroneCommands.projitems*{f0a11506-1b5f-4356-a560-4764b9077646}*SharedItemsImports = 4
+		DroneCommands\DroneCommands.projitems*{f0b901d4-af77-4a81-a4e0-f5160088d2d2}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -65,6 +74,10 @@ Global
 		{644DE716-04FC-4065-B2DB-0276CD25E6D6}.Debug|x64.Build.0 = Debug|x64
 		{93208769-AC73-4299-A6A3-1C64CD05B5B2}.Debug|x64.ActiveCfg = Debug|x64
 		{93208769-AC73-4299-A6A3-1C64CD05B5B2}.Debug|x64.Build.0 = Debug|x64
+		{F0B901D4-AF77-4A81-A4E0-F5160088D2D2}.Debug|x64.ActiveCfg = Debug|x64
+		{F0B901D4-AF77-4A81-A4E0-F5160088D2D2}.Debug|x64.Build.0 = Debug|x64
+		{F0A11506-1B5F-4356-A560-4764B9077646}.Debug|x64.ActiveCfg = Debug|x64
+		{F0A11506-1B5F-4356-A560-4764B9077646}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
