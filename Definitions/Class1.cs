@@ -83,6 +83,7 @@ namespace IngameScript
 
             public readonly MyItemType bigNato = new MyItemType(ammoBase, "NATO_25x184mm");
             public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
+            public readonly MyItemType missile = new MyItemType(ammoBase, "Missile200mm");
 
             public readonly MyDefinitionId bigNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_25x184mmMagazine");
             public readonly MyDefinitionId smallNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_5p56x45mmMagazine");
@@ -105,9 +106,11 @@ namespace IngameScript
             public readonly MyDefinitionId steelPlateBP = MyDefinitionId.Parse($"{bpBase}/SteelPlate");
             public readonly MyDefinitionId superConductorBP = MyDefinitionId.Parse($"{bpBase}/Superconductor");
             public readonly MyDefinitionId thrusterBP = MyDefinitionId.Parse($"{bpBase}/ThrustComponent");
+            public readonly MyDefinitionId missileBP = MyDefinitionId.Parse($"{bpBase}/Missile200mm");
 
             public readonly MyDefinitionId electricity = MyDefinitionId.Parse($"{gasBase}/Electricity");
             public readonly MyDefinitionId hydrogen = MyDefinitionId.Parse($"{gasBase}/Oxygen");
+            
 
             private readonly Dictionary<string, ItemInfo> defTable = new Dictionary<string, ItemInfo>();
 
@@ -123,6 +126,7 @@ namespace IngameScript
                 defTable.Add("LargeTube", new ItemInfo(largeTube, largeTubeBP));
                 defTable.Add("MedicalComp", new ItemInfo(medical, medicalBP));
                 defTable.Add("MetalGrid", new ItemInfo(metalGrid, metalGridBP));
+                defTable.Add("Missile", new ItemInfo(missile, missileBP));
                 defTable.Add("Motor", new ItemInfo(motor, motorBP));
                 defTable.Add("PowerCell", new ItemInfo(powerCell, powerCellBP));
                 defTable.Add("RadioComm", new ItemInfo(radioComm, radioCommBP));

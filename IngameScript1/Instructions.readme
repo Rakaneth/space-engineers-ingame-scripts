@@ -23,6 +23,7 @@ InteriorPlate=0
 LargeTube=0
 MedicalComp=0
 MetalGrid=0
+Missile=0
 Motor=0
 PowerCell=0
 RadioComm=0
@@ -33,4 +34,5 @@ SteelPlate=0
 BigNato=0
 SmallNato=0
 ThrusterComp=0
+Superconductor=0
 ---
