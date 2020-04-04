@@ -42,7 +42,7 @@ namespace IngameScript
 
         public void Main(string argument)
         {
-            if (argument.Contains("HOME"))
+            if (argument.Contains("RETURN"))
             {
                 IGC.SendBroadcastMessage(DroneCommands.DRONE_CMD, "RETURN");
                 return;

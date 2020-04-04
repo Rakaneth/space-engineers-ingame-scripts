@@ -35,6 +35,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "DroneCommands", "DroneComma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DroneCommander", "DroneCommander\DroneCommander.csproj", "{F0A11506-1B5F-4356-A560-4764B9077646}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryStacker", "InventoryStacker\InventoryStacker.csproj", "{FD5C7C60-3C01-4A80-A640-AA3A68A364A5}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -47,6 +49,7 @@ Global
 		DroneCommands\DroneCommands.projitems*{bccec4b9-c578-4522-a809-b1a05a9e359f}*SharedItemsImports = 13
 		DroneCommands\DroneCommands.projitems*{f0a11506-1b5f-4356-a560-4764b9077646}*SharedItemsImports = 4
 		DroneCommands\DroneCommands.projitems*{f0b901d4-af77-4a81-a4e0-f5160088d2d2}*SharedItemsImports = 4
+		Definitions\Definitions.projitems*{fd5c7c60-3c01-4a80-a640-aa3a68a364a5}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -78,6 +81,8 @@ Global
 		{F0B901D4-AF77-4A81-A4E0-F5160088D2D2}.Debug|x64.Build.0 = Debug|x64
 		{F0A11506-1B5F-4356-A560-4764B9077646}.Debug|x64.ActiveCfg = Debug|x64
 		{F0A11506-1B5F-4356-A560-4764B9077646}.Debug|x64.Build.0 = Debug|x64
+		{FD5C7C60-3C01-4A80-A640-AA3A68A364A5}.Debug|x64.ActiveCfg = Debug|x64
+		{FD5C7C60-3C01-4A80-A640-AA3A68A364A5}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
