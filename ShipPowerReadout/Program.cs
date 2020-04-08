@@ -38,6 +38,8 @@ namespace IngameScript
         const char bar = '\u2588';
         const char dash = '-';
         IMyProgrammableBlock displayController;
+        int bars;
+        MyIni ini;
         
 
         public Program()
@@ -52,7 +54,15 @@ namespace IngameScript
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
             displayController = GridTerminalSystem.GetBlockWithName("Display Controller") as IMyProgrammableBlock;
 
-           
+            ini = new MyIni();
+            if (!ini.TryParse(Me.CustomData))
+                Echo($"Cannot parse custom data.");
+
+            if (ini.ContainsKey("Config", "Bars"))
+                bars = ini.Get("Config", "bars").ToInt32();
+            else
+                bars = 10;
+
             if (displays.Count == 0 && cockpits.Count == 0 && displayController == null)
                 throw new Exception("Remember to add [PowerReadout] to the Custom Data of any displays or cockpits you want to show this information.");
 
@@ -105,10 +115,10 @@ namespace IngameScript
             {
                 generated += producer.CurrentOutput;
                 maxGenerated += producer.MaxOutput;
-                if (showAll) sb.Append($"{producer.CustomName}: {producer.CurrentOutput:N4}\n");
+                if (showAll) sb.Append($"{producer.CustomName}: {producer.CurrentOutput:N2}\n");
             }
             
-            sb.Append($"Total Generated: {generated:N4}/{maxGenerated:N4} MW\n\n");
+            sb.Append($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n");
             
             sb.Append("Power Sinks\n");
             
@@ -118,13 +128,13 @@ namespace IngameScript
                 {
                     u = sink.CurrentInputByType(defs.electricity);
                     used += u;
-                    if (showAll) sb.Append($"{consumer.CustomName}: {u:N4}\n");
+                    if (showAll) sb.Append($"{consumer.CustomName}: {u:N2}\n");
                 }
             }
 
-            sb.Append($"Total Consumed: {used:N4} MW");
-            sb.Append($"[{Bar(used, maxGenerated, 20, bar, dash)}]");
-            sb.Append($" ({used / maxGenerated * 100:N4}% of max power)\n\n");
+            sb.Append($"Total Consumed: {used:N2} MW");
+            sb.Append($"[{Bar(used, maxGenerated, bars, bar, dash)}]");
+            sb.Append($" ({used / maxGenerated * 100:N2}% of max power)\n\n");
             sb.Append("Battery Storage\n");
 
             if (batts.Count > 0)
@@ -135,14 +145,14 @@ namespace IngameScript
                     battMaxStored += batt.MaxStoredPower;
                     if (showAll)
                     {
-                        sb.Append($"{batt.CustomName}: {batt.CurrentStoredPower:N4} / {batt.MaxStoredPower:N4} MWh ");
-                        sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, 20, bar, dash)}]\n");
+                        sb.Append($"{batt.CustomName}: {batt.CurrentStoredPower:N2} / {batt.MaxStoredPower:N4} MWh ");
+                        sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, bars, bar, dash)}]\n");
                     }
                 }
 
-                sb.Append($"Total Stored: {battStored:N4} / {battMaxStored:N4} MWh");
-                sb.Append($"[{Bar(battStored, battMaxStored, 20, '\u2588', '-')}]");
-                sb.Append($" {battStored / battMaxStored * 100:N4}% full\n\n");
+                sb.Append($"Total Stored: {battStored:N2} / {battMaxStored:N2} MWh");
+                sb.Append($"[{Bar(battStored, battMaxStored, bars, bar, dash)}]");
+                sb.Append($" {battStored / battMaxStored * 100:N2}% full\n\n");
             }
  
             if (tanks.Count > 0)
@@ -153,12 +163,12 @@ namespace IngameScript
                     h2Current += tank.FilledRatio;
                     if (showAll)
                     {
-                        sb.Append($"{tank.CustomName}: {tank.FilledRatio * 100:N4}%");
-                        sb.Append($"[{Bar(tank.FilledRatio * 100, 100, 20, bar, dash)}]\n\n");
+                        sb.Append($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%");
+                        sb.Append($"[{Bar(tank.FilledRatio * 100, 100, bars, bar, dash)}]\n\n");
                     }
                 }
-                sb.Append($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N4}%");
-                sb.Append($"[{Bar(h2Current, tanks.Count, 20, bar, dash)}]\n\n");
+                sb.Append($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N2}%");
+                sb.Append($"[{Bar(h2Current, tanks.Count, bars, bar, dash)}]\n\n");
             }
 
             if (oxyTanks.Count > 0)
@@ -169,12 +179,12 @@ namespace IngameScript
                     o2Current += oxy.FilledRatio;
                     if (showAll)
                     {
-                        sb.Append($"{oxy.CustomName}: {oxy.FilledRatio * 100:N4}%");
-                        sb.Append($"[{Bar(oxy.FilledRatio, 1, 20, bar, dash)}]\n\n");
+                        sb.Append($"{oxy.CustomName}: {oxy.FilledRatio * 100:N2}%");
+                        sb.Append($"[{Bar(oxy.FilledRatio, 1, bars, bar, dash)}]\n\n");
                     }
                 }
-                sb.Append($"Total Oxygen Reserves: {o2Current * 100 / oxyTanks.Count:N4}%");
-                sb.Append($"[{Bar(o2Current, oxyTanks.Count, 20, bar, dash)}]\n\n");
+                sb.Append($"Total Oxygen Reserves: {o2Current * 100 / oxyTanks.Count:N2}%");
+                sb.Append($"[{Bar(o2Current, oxyTanks.Count, bars, bar, dash)}]\n\n");
             }
 
             if (reactors.Count > 0)
@@ -184,7 +194,7 @@ namespace IngameScript
                 {
                     uStored += reactor.GetInventory(0).GetItemAmount(defs.uranium);
                 }
-                sb.Append($"Total Uranium in Reactors: {uStored}\n\n");
+                sb.Append($"Total Uranium in Reactors: {(float)uStored:N2}\n\n");
             }
 
             foreach (var display in displays)
