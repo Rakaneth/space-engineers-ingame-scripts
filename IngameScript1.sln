@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryStacker", "Invento
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipRestocker", "ShipRestocker\ShipRestocker.csproj", "{FC0918F9-D979-4E26-A640-AB160393BC19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMonitor", "AlertMonitor\AlertMonitor.csproj", "{1D82F07B-3C3F-4B1B-8042-6ADBE39A715A}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -88,6 +90,8 @@ Global
 		{FD5C7C60-3C01-4A80-A640-AA3A68A364A5}.Debug|x64.Build.0 = Debug|x64
 		{FC0918F9-D979-4E26-A640-AB160393BC19}.Debug|x64.ActiveCfg = Debug|x64
 		{FC0918F9-D979-4E26-A640-AB160393BC19}.Debug|x64.Build.0 = Debug|x64
+		{1D82F07B-3C3F-4B1B-8042-6ADBE39A715A}.Debug|x64.ActiveCfg = Debug|x64
+		{1D82F07B-3C3F-4B1B-8042-6ADBE39A715A}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
