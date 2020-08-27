@@ -38,9 +38,9 @@ namespace IngameScript
         {
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
             MyIniParseResult result;
-            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => assembler.IsSameConstructAs(Me) && assembler.CustomName.Contains("Factory"));
+            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => assembler.IsSameConstructAs(Me) && MyIni.HasSection(assembler.CustomData, "Factory"));
             GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me));
-            GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && display.CustomName.Contains("Factory Display"));
+            GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
             myDisplay = Me.GetSurface(0);
             sb = new StringBuilder();
 

@@ -67,6 +67,7 @@ namespace IngameScript
             public readonly MyItemType detector = new MyItemType(compBase, "Detector");
             public readonly MyItemType display = new MyItemType(compBase, "Display");
             public readonly MyItemType girder = new MyItemType(compBase, "Girder");
+            public readonly MyItemType gravComp = new MyItemType(compBase, "GravityGenerator");
             public readonly MyItemType interiorPlate = new MyItemType(compBase, "InteriorPlate");
             public readonly MyItemType largeTube = new MyItemType(compBase, "LargeTube");
             public readonly MyItemType medical = new MyItemType(compBase, "Medical");
@@ -93,6 +94,7 @@ namespace IngameScript
             public readonly MyDefinitionId detectorBP = MyDefinitionId.Parse($"{bpBase}/DetectorComponent");
             public readonly MyDefinitionId displayBP = MyDefinitionId.Parse($"{bpBase}/Display");
             public readonly MyDefinitionId girderBP = MyDefinitionId.Parse($"{bpBase}/GirderComponent");
+            public readonly MyDefinitionId gravCompBP = MyDefinitionId.Parse($"{bpBase}/GravityGeneratorComponent");
             public readonly MyDefinitionId interiorPlateBP = MyDefinitionId.Parse($"{bpBase}/InteriorPlate");
             public readonly MyDefinitionId largeTubeBP = MyDefinitionId.Parse($"{bpBase}/LargeTube");
             public readonly MyDefinitionId medicalBP = MyDefinitionId.Parse($"{bpBase}/MedicalComponent");
@@ -122,6 +124,7 @@ namespace IngameScript
                 defTable.Add("DetectorComp", new ItemInfo(detector, detectorBP));
                 defTable.Add("Display", new ItemInfo(display, displayBP));
                 defTable.Add("Girder", new ItemInfo(girder, girderBP));
+                defTable.Add("GravityComp", new ItemInfo(gravComp, gravCompBP));
                 defTable.Add("InteriorPlate", new ItemInfo(interiorPlate, interiorPlateBP));
                 defTable.Add("LargeTube", new ItemInfo(largeTube, largeTubeBP));
                 defTable.Add("MedicalComp", new ItemInfo(medical, medicalBP));
