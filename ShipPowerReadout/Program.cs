@@ -27,6 +27,10 @@ namespace IngameScript
         List<IMyGasTank> oxyTanks = new List<IMyGasTank>();
         //StringBuilder sb = new StringBuilder();
         List<IMyTextPanel> displays = new List<IMyTextPanel>();
+        List<IMyTextPanel> battDisplays = new List<IMyTextPanel>();
+        List<IMyTextPanel> h2Displays = new List<IMyTextPanel>();
+        List<IMyTextPanel> o2Displays = new List<IMyTextPanel>();
+        List<IMyTextPanel> reactorDisplays = new List<IMyTextPanel>();
         List<IMyTerminalBlock> consumers = new List<IMyTerminalBlock>();
         List<IMyBatteryBlock> batts = new List<IMyBatteryBlock>();
         List<IMyReactor> reactors = new List<IMyReactor>();
@@ -35,23 +39,25 @@ namespace IngameScript
         Dictionary<long, StringBuilder> sbs = new Dictionary<long, StringBuilder>();
         Definitions defs = new Definitions();
         MyResourceSinkComponent sink;
-        MyCommandLine cmd = new MyCommandLine();
         const char bar = '\u2588';
         const char dash = '-';
         IMyProgrammableBlock displayController;
         MyIni ini;
         
-
         public Program()
         {
             int bars;
-            GridTerminalSystem.GetBlocksOfType(producers, p => p.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(producers, p => p.IsSameConstructAs(Me) && !(p is IMyBatteryBlock));
             GridTerminalSystem.GetBlocksOfType(tanks, e => e.IsSameConstructAs(Me) && e.Capacity == 5000000f);
             GridTerminalSystem.GetBlocksOfType(batts, b => b.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(displays, display => MyIni.HasSection(display.CustomData, "PowerReadout") && display.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(cockpits, cockpit => MyIni.HasSection(cockpit.CustomData, "PowerReadout") && cockpit.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(oxyTanks, o => o.IsSameConstructAs(Me) && o.Capacity == 100000f);
             GridTerminalSystem.GetBlocksOfType(reactors, r => r.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(battDisplays, bd => MyIni.HasSection(bd.CustomData, "BatteryInfo") && bd.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(h2Displays, h2 => MyIni.HasSection(h2.CustomData, "H2Info") && h2.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(o2Displays, o2 => MyIni.HasSection(o2.CustomData, "O2Info") && o2.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(reactorDisplays, rd => MyIni.HasSection(rd.CustomData, "ReactorInfo") && rd.IsSameConstructAs(Me));
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
             displayController = GridTerminalSystem.GetBlockWithName("Display Controller") as IMyProgrammableBlock;
 
@@ -60,17 +66,33 @@ namespace IngameScript
             if (displays.Count == 0 && cockpits.Count == 0 && displayController == null)
                 throw new Exception("Remember to add [PowerReadout] to the Custom Data of any displays or cockpits you want to show this information.");
 
-            foreach (var display in displays)
+            var displayLists = new Dictionary<string, List<IMyTextPanel>>()
             {
-                display.Font = "Monospace";
-                if (!ini.TryParse(display.CustomData))
-                    Echo($"Cannot parse custom data for {display.CustomName}");
+                { "PowerReadout", displays },
+                { "BatteryInfo", battDisplays },
+                { "H2Info", h2Displays },
+                { "O2Info", o2Displays },
+                {"ReactorInfo", reactorDisplays },
+            };
 
-                
-                bars = ini.ContainsKey("PowerReadout", "Bars") ? ini.Get("PowerReadout", "Bars").ToInt32() : 10;
-                barConfig.Add(display.EntityId, bars);
-                sbs.Add(display.EntityId, new StringBuilder());
-                display.ContentType = ContentType.TEXT_AND_IMAGE;
+            Action<long, string> barConfigF = (eid, section) =>
+            {
+                bars = ini.ContainsKey(section, "Bars") ? ini.Get(section, "Bars").ToInt32() : 5;
+                barConfig.Add(eid, bars);
+            };
+            
+            foreach (var displayListEntry in displayLists)
+            {
+                foreach (var display in displayListEntry.Value)
+                {
+                    if (!ini.TryParse(display.CustomData))
+                        Echo($"Cannot parse custom data for {display.CustomName}");
+                    barConfigF(display.EntityId, displayListEntry.Key);
+                    sbs.Add(display.EntityId, new StringBuilder());
+                    display.Font = "Monospace";
+                    display.ContentType = ContentType.TEXT_AND_IMAGE;
+                    display.FontSize = 0.6f;
+                }
             }
 
             foreach (var cockpit in cockpits)
@@ -80,13 +102,12 @@ namespace IngameScript
                 if (!ini.TryParse(cockpit.CustomData))
                     Echo($"Cannot parse custom data for {cockpit.CustomName}");
 
-                bars = ini.ContainsKey("PowerReadout", "Bars") ? ini.Get("PowerReadout", "Bars").ToInt32() : 10;
+                bars = ini.ContainsKey("PowerReadout", "Bars") ? ini.Get("PowerReadout", "Bars").ToInt32() : 5;
                 barConfig.Add(cockpit.EntityId, bars);
                 sbs.Add(cockpit.EntityId, new StringBuilder());
-
             }
                        
-            GridTerminalSystem.GetBlocksOfType(consumers, consumer => consumer.Components.TryGet(out sink) && sink.IsPoweredByType(defs.electricity));
+            GridTerminalSystem.GetBlocksOfType(consumers, consumer => consumer.Components.TryGet(out sink) && sink.IsPoweredByType(defs.electricity) && !(consumer is IMyBatteryBlock));
             var smReact = reactors.Count(e => e.MaxOutput == 15f);
             var lgReact = reactors.Count(e => e.MaxOutput == 300f);
             Echo($"Batteries: {batts.Count}");
@@ -108,35 +129,17 @@ namespace IngameScript
             double h2Current = 0;
             double o2Current = 0;
             MyFixedPoint uStored = 0;
-            bool showAll;
-            bool showBatts;
 
-            
-            if (cmd.TryParse(argument)) {
-                showAll = cmd.Switch("showall");
-                showBatts = cmd.Switch("batteries");
-            } else {
-                showAll = MyIni.HasSection(Me.CustomData, "ShowAll");
-                showBatts = MyIni.HasSection(Me.CustomData, "Batteries");
-            }
-
-
-            AddTextAll("Power Sources\n");
-            //sb.Append("Power Sources\n");
+            AddDisplayList("Power Sources\n", displays);
 
             foreach (var producer in producers)
             {
                 generated += producer.CurrentOutput;
                 maxGenerated += producer.MaxOutput;
-                if (showAll)
-                    AddTextAll($"{producer.CustomName}: {producer.CurrentOutput:N2}\n");
-                //sb.Append($"{producer.CustomName}: {producer.CurrentOutput:N2}\n");
             }
 
-            AddTextAll($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n");
-            AddTextAll("Power Sinks\n");
-            //sb.Append($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n");
-            //sb.Append("Power Sinks\n");
+            AddDisplayList($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n", displays);
+            AddDisplayList("Power Sinks\n", displays);
             
             foreach (var consumer in consumers)
             {
@@ -144,19 +147,13 @@ namespace IngameScript
                 {
                     u = sink.CurrentInputByType(defs.electricity);
                     used += u;
-                    if (showAll)
-                        AddTextAll($"{consumer.CustomName}: {u:N2}\n");
-                    //sb.Append($"{consumer.CustomName}: {u:N2}\n");
                 }
             }
 
-            AddTextAll($"Total Consumed: {used:N2} MW");
-            AddBarAll(used, maxGenerated);
-            AddTextAll($" ({used / maxGenerated * 100:N2}% of max power)\n\n");
-            AddTextAll("Battery Storage\n");
-            //sb.Append($"[{Bar(used, maxGenerated, bars, bar, dash)}]");
-            //sb.Append($" ({used / maxGenerated * 100:N2}% of max power)\n\n");
-            //sb.Append("Battery Storage\n");
+            AddDisplayList($"Total Consumed: {used:N2} MW", displays);
+            AddBarList(used, maxGenerated, displays);
+            AddDisplayList($" ({used / maxGenerated * 100:N2}% of max power)\n\n", displays);
+            AddDisplayList("Battery Storage\n", displays, battDisplays);
 
             if (batts.Count > 0)
             {
@@ -164,90 +161,69 @@ namespace IngameScript
                 {
                     battStored += batt.CurrentStoredPower;
                     battMaxStored += batt.MaxStoredPower;
-                    if (showAll)
-                    {
-                        AddTextAll($"{batt.CustomName}: {batt.CurrentStoredPower:N2} / {batt.MaxStoredPower:N4} MWh ");
-                        AddBarAll(batt.CurrentStoredPower, batt.MaxStoredPower);
-                        //sb.Append($"{batt.CustomName}: {batt.CurrentStoredPower:N2} / {batt.MaxStoredPower:N4} MWh ");
-                        //sb.Append($"[{Bar(batt.CurrentStoredPower, batt.MaxStoredPower, bars, bar, dash)}]\n");
-                    }
+
+                    AddDisplayList($"{batt.CustomName}\nOutput {batt.CurrentOutput:N2} MW\n", battDisplays);
+                    AddDisplayList($"{batt.CurrentStoredPower:N2} / {batt.MaxStoredPower:N2} MWh ", battDisplays);
+                    AddBarList(batt.CurrentStoredPower, batt.MaxStoredPower, battDisplays);
+                    AddDisplayList("\n\n", battDisplays);
                 }
 
-                AddTextAll($"Total Stored: {battStored:N2} / {battMaxStored:N2} MWh");
-                AddBarAll(battStored, battMaxStored);
-                AddTextAll($" {battStored / battMaxStored * 100:N2}% full\n\n");
-                //sb.Append($"Total Stored: {battStored:N2} / {battMaxStored:N2} MWh");
-                //sb.Append($"[{Bar(battStored, battMaxStored, bars, bar, dash)}]");
-                //sb.Append($" {battStored / battMaxStored * 100:N2}% full\n\n");
+                AddDisplayList($"Total Stored: {battStored:N2} / {battMaxStored:N2} MWh", displays, battDisplays);
+                AddBarList(battStored, battMaxStored, displays, battDisplays);
+                AddDisplayList($" {battStored / battMaxStored * 100:N2}% full\n\n", displays, battDisplays);
             }
  
             if (tanks.Count > 0)
             {
-                AddTextAll("Hydrogen\n");
-                //sb.Append("Hydrogen\n");
+                AddDisplayList("Hydrogen\n", displays, h2Displays);
+
                 foreach (var tank in tanks)
                 {    
                     h2Current += tank.FilledRatio;
-                    if (showAll)
-                    {
-                        AddTextAll($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%");
-                        AddBarAll(tank.FilledRatio, 1);
-                        AddTextAll("\n\n");
-                        //sb.Append($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%");
-                        //sb.Append($"[{Bar(tank.FilledRatio * 100, 100, bars, bar, dash)}]\n\n");
-                    }
+                    AddDisplayList($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%", h2Displays);
+                    AddBarList(tank.FilledRatio, 1, h2Displays);
+                    AddDisplayList($"\n\n", h2Displays);
                 }
-                AddTextAll($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N2}%");
-                AddBarAll(h2Current, tanks.Count);
-                AddTextAll("\n\n");
-                //sb.Append($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N2}%");
-                //sb.Append($"[{Bar(h2Current, tanks.Count, bars, bar, dash)}]\n\n");
+
+                AddDisplayList($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N2}%", displays, h2Displays);
+                AddBarList(h2Current, tanks.Count, displays, h2Displays);
+                AddDisplayList("\n\n", displays, h2Displays);
             }
 
             if (oxyTanks.Count > 0)
             {
-                AddTextAll("Oxygen\n");
-                //sb.Append("Oxygen\n");
+                AddDisplayList("Oxygen\n", displays, o2Displays);
+
                 foreach (var oxy in oxyTanks)
                 {
                     o2Current += oxy.FilledRatio;
-                    if (showAll)
-                    {
-                        AddTextAll($"{oxy.CustomName}: {oxy.FilledRatio * 100:N2}%");
-                        AddBarAll(oxy.FilledRatio, 1);
-                        AddTextAll("\n\n");
-                        //sb.Append($"{oxy.CustomName}: {oxy.FilledRatio * 100:N2}%");
-                        //sb.Append($"[{Bar(oxy.FilledRatio, 1, bars, bar, dash)}]\n\n");
-                    }
+                    AddDisplayList($"{oxy.CustomName}: {oxy.FilledRatio * 100:N2}%", o2Displays);
+                    AddBarList(oxy.FilledRatio, 1, o2Displays);
+                    AddDisplayList("\n\n", o2Displays);
                 }
-                AddTextAll($"Total Oxygen Reserves: {o2Current * 100 / oxyTanks.Count:N2}%");
-                AddBarAll(o2Current, oxyTanks.Count);
-                AddTextAll("\n\n");
-                //sb.Append($"Total Oxygen Reserves: {o2Current * 100 / oxyTanks.Count:N2}%");
-                //sb.Append($"[{Bar(o2Current, oxyTanks.Count, bars, bar, dash)}]\n\n");
+
+                AddDisplayList($"Total Oxygen Reserves: {o2Current * 100 / oxyTanks.Count:N2}%", displays, o2Displays);
+                AddBarList(o2Current, oxyTanks.Count, displays, o2Displays);
+                AddDisplayList("\n\n", displays, o2Displays);
             }
 
             if (reactors.Count > 0)
             {
-                AddTextAll($"Reactors\n");
-                //sb.Append($"Reactors\n");
+                AddDisplayList("Reactors\n", displays, reactorDisplays);
+
                 foreach (var reactor in reactors)
                 {
-                    uStored += reactor.GetInventory(0).GetItemAmount(defs.uranium);
+                    var thisU = reactor.GetInventory(0).GetItemAmount(defs.uranium);
+                    uStored += thisU;
+                    AddDisplayList($"{reactor.CustomName}\nOutput: {reactor.CurrentOutput:N2} MW\n", reactorDisplays);
+                    AddDisplayList($"Uranium Stored: {(float)thisU:N2} kg\n\n", reactorDisplays);
                 }
-                AddTextAll($"Total Uranium in Reactors: {(float)uStored:N2}\n\n");
-                //sb.Append($"Total Uranium in Reactors: {(float)uStored:N2}\n\n");
+
+                AddDisplayList($"Total Uranium in Reactors: {(float)uStored:N2}\n\n", displays, reactorDisplays);
             }
 
             WriteAll();
             ClearAllSB();
-
-            //foreach (var cockpit in cockpits)
-            //    cockpit.GetSurface(0).WriteText(sb);
-
-            //displayController?.TryRun(sb.ToString());
-
-            //sb.Clear();
         }
 
         private string Bar(double value, double maxValue, int barWidth, char c, char pad)
@@ -268,22 +244,18 @@ namespace IngameScript
             AddText(Bar(value, maxValue, bars, bar, dash), entity);
         }
 
-        private void AddTextAll(string text)
+        private void AddDisplayList(string text, params List<IMyTextPanel>[] displayLists)
         {
-            foreach (var display in displays)
-                AddText(text, display);
-
-            foreach (var cockpit in cockpits)
-                AddText(text, cockpit);
+            foreach (var displayList in displayLists)
+                foreach (var d in displayList)
+                    AddText(text, d);
         }
 
-        private void AddBarAll(double value, double maxValue)
+        private void AddBarList(double value, double maxValue, params List<IMyTextPanel>[] displayLists)
         {
-            foreach (var display in displays)
-                AddBar(value, maxValue, display);
-
-            foreach (var cockpit in cockpits)
-                AddBar(value, maxValue, cockpit);
+            foreach (var displayList in displayLists)
+                foreach (var d in displayList)
+                    AddBar(value, maxValue, d);
         }
 
         private void ClearAllSB()
@@ -292,12 +264,17 @@ namespace IngameScript
                 sb.Clear();
         }
 
+
         private void WriteAll()
         {
-            foreach (var display in displays)
+            var displayLists = new List<List<IMyTextPanel>>() { displays, battDisplays, h2Displays, o2Displays, reactorDisplays };
+            foreach (var displayList in displayLists) 
             {
-                var sb = sbs[display.EntityId];
-                display.WriteText(sb);
+                foreach (var display in displayList)
+                {
+                    var sb = sbs[display.EntityId];
+                    display.WriteText(sb);
+                }
             }
 
             foreach (var cockpit in cockpits)
@@ -305,6 +282,6 @@ namespace IngameScript
                 var sbc = sbs[cockpit.EntityId];
                 cockpit.GetSurface(0).WriteText(sbc);
             }
-        }
+        }      
     }
 }

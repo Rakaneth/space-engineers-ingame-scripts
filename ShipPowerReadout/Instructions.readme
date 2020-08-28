@@ -1,5 +1,24 @@
 ﻿R e a d m e
 -----------
 
-In this file you can include any instructions or other comments you want to have injected onto the 
-top of your final script. You can safely delete this file if you do not want any such comments.
+Add [PowerReadout] to the Custom Data of LCDs meant to show summary info. 
+At least one LCD must be configured this way.
+
+Add [BatteryInfo] to LCDs meant to show battery info.
+Add [H2Info] to LCDs meant to show hydrogen tank info.
+Add [O2Info] to LCDs meant to show oxygen tank info.
+Add [ReactorInfo] to LCDs meant to show reactor info.
+
+The number of bars used in each display can be customized with Bars key 
+in the Custom Data of the main readout LCD. For example, a hydrogen readout 
+on a a small LCD using 3 bars maximum to display remaining hydrogen info would
+look like this:
+
+[H2Info]
+Bars=3
+
+Other than adding the required custom data to LCDs, the script requires no other setup.
+Font settings will be set to reasonable defaults.
+Monospace font produces the best looking result.
+Font sizes can be adjusted to taste.
+Recompile the script when the grid is updated with new power blocks or batteries.
