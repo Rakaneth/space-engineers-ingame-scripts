@@ -31,6 +31,8 @@ namespace IngameScript
         List<IMyTextPanel> h2Displays = new List<IMyTextPanel>();
         List<IMyTextPanel> o2Displays = new List<IMyTextPanel>();
         List<IMyTextPanel> reactorDisplays = new List<IMyTextPanel>();
+        List<IMyTextPanel> producerDisplays = new List<IMyTextPanel>();
+        List<IMyTextPanel> consumerDisplays = new List<IMyTextPanel>();
         List<IMyTerminalBlock> consumers = new List<IMyTerminalBlock>();
         List<IMyBatteryBlock> batts = new List<IMyBatteryBlock>();
         List<IMyReactor> reactors = new List<IMyReactor>();
@@ -58,7 +60,9 @@ namespace IngameScript
             GridTerminalSystem.GetBlocksOfType(h2Displays, h2 => MyIni.HasSection(h2.CustomData, "H2Info") && h2.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(o2Displays, o2 => MyIni.HasSection(o2.CustomData, "O2Info") && o2.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(reactorDisplays, rd => MyIni.HasSection(rd.CustomData, "ReactorInfo") && rd.IsSameConstructAs(Me));
-            Runtime.UpdateFrequency = UpdateFrequency.Update100;
+            GridTerminalSystem.GetBlocksOfType(producerDisplays, pd => MyIni.HasSection(pd.CustomData, "ProducerInfo") && pd.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(consumerDisplays, cd => MyIni.HasSection(cd.CustomData, "ConsumerInfo") && cd.IsSameConstructAs(Me));
+            Runtime.UpdateFrequency = UpdateFrequency.Update10;
             displayController = GridTerminalSystem.GetBlockWithName("Display Controller") as IMyProgrammableBlock;
 
             ini = new MyIni();
@@ -73,10 +77,13 @@ namespace IngameScript
                 { "H2Info", h2Displays },
                 { "O2Info", o2Displays },
                 {"ReactorInfo", reactorDisplays },
+                {"ProducerInfo", producerDisplays },
+                {"ConsumerInfo", consumerDisplays },
             };
 
             Action<long, string> barConfigF = (eid, section) =>
             {
+                //Echo($"Config for {eid} with section {section}");
                 bars = ini.ContainsKey(section, "Bars") ? ini.Get(section, "Bars").ToInt32() : 5;
                 barConfig.Add(eid, bars);
             };
@@ -91,7 +98,7 @@ namespace IngameScript
                     sbs.Add(display.EntityId, new StringBuilder());
                     display.Font = "Monospace";
                     display.ContentType = ContentType.TEXT_AND_IMAGE;
-                    display.FontSize = 0.6f;
+                    display.FontSize = 0.5f;
                 }
             }
 
@@ -107,7 +114,11 @@ namespace IngameScript
                 sbs.Add(cockpit.EntityId, new StringBuilder());
             }
                        
-            GridTerminalSystem.GetBlocksOfType(consumers, consumer => consumer.Components.TryGet(out sink) && sink.IsPoweredByType(defs.electricity) && !(consumer is IMyBatteryBlock));
+            GridTerminalSystem.GetBlocksOfType(consumers, 
+                consumer => consumer.Components.TryGet(out sink) 
+                && sink.IsPoweredByType(defs.electricity) 
+                && !(consumer is IMyBatteryBlock) 
+                && consumer.BlockDefinition.SubtypeName != "LargeHydrogenEngine");
             var smReact = reactors.Count(e => e.MaxOutput == 15f);
             var lgReact = reactors.Count(e => e.MaxOutput == 300f);
             Echo($"Batteries: {batts.Count}");
@@ -130,23 +141,29 @@ namespace IngameScript
             double o2Current = 0;
             MyFixedPoint uStored = 0;
 
-            AddDisplayList("Power Sources\n", displays);
+            AddDisplayList("Power Sources\n", displays, producerDisplays);
 
             foreach (var producer in producers)
             {
                 generated += producer.CurrentOutput;
                 maxGenerated += producer.MaxOutput;
+                if (producer.CurrentOutput >= 0.001f)
+                    AddDisplayList($"{producer.CustomName}: {producer.CurrentOutput:N2}\n", producerDisplays);
             }
 
-            AddDisplayList($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n", displays);
-            AddDisplayList("Power Sinks\n", displays);
+            AddDisplayList($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n", displays, producerDisplays);
+            AddDisplayList("Power Sinks\n", displays, consumerDisplays);
             
             foreach (var consumer in consumers)
             {
                 if (consumer.Components.TryGet(out sink))
                 {
+                    //var defin = consumer.BlockDefinition;
+                    //Echo(defin.SubtypeName);
                     u = sink.CurrentInputByType(defs.electricity);
                     used += u;
+                    if (u >= 0.1f)
+                        AddDisplayList($"{consumer.CustomName}: {u}\n", consumerDisplays);
                 }
             }
 
@@ -182,7 +199,7 @@ namespace IngameScript
                     h2Current += tank.FilledRatio;
                     AddDisplayList($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%", h2Displays);
                     AddBarList(tank.FilledRatio, 1, h2Displays);
-                    AddDisplayList($"\n\n", h2Displays);
+                    AddDisplayList($"\n", h2Displays);
                 }
 
                 AddDisplayList($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N2}%", displays, h2Displays);
@@ -199,7 +216,7 @@ namespace IngameScript
                     o2Current += oxy.FilledRatio;
                     AddDisplayList($"{oxy.CustomName}: {oxy.FilledRatio * 100:N2}%", o2Displays);
                     AddBarList(oxy.FilledRatio, 1, o2Displays);
-                    AddDisplayList("\n\n", o2Displays);
+                    AddDisplayList("\n", o2Displays);
                 }
 
                 AddDisplayList($"Total Oxygen Reserves: {o2Current * 100 / oxyTanks.Count:N2}%", displays, o2Displays);
@@ -267,7 +284,7 @@ namespace IngameScript
 
         private void WriteAll()
         {
-            var displayLists = new List<List<IMyTextPanel>>() { displays, battDisplays, h2Displays, o2Displays, reactorDisplays };
+            var displayLists = new List<List<IMyTextPanel>>() { displays, battDisplays, h2Displays, o2Displays, reactorDisplays, producerDisplays, consumerDisplays };
             foreach (var displayList in displayLists) 
             {
                 foreach (var display in displayList)

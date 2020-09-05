@@ -4,6 +4,8 @@
 Add [PowerReadout] to the Custom Data of LCDs meant to show summary info. 
 At least one LCD must be configured this way.
 
+Add [ProducerInfo] to LCDs meant to show power producer info, not including batteries.
+Add [ConsumerInfo] to LCDs meant to show power consumer info, not including batteries.
 Add [BatteryInfo] to LCDs meant to show battery info.
 Add [H2Info] to LCDs meant to show hydrogen tank info.
 Add [O2Info] to LCDs meant to show oxygen tank info.
@@ -21,4 +23,4 @@ Other than adding the required custom data to LCDs, the script requires no other
 Font settings will be set to reasonable defaults.
 Monospace font produces the best looking result.
 Font sizes can be adjusted to taste.
-Recompile the script when the grid is updated with new power blocks or batteries.
+Recompile the script when the grid is updated with new blocks.
