@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertMonitor", "AlertMonito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThrusterInfo", "ThrusterInfo\ThrusterInfo.csproj", "{576080B5-7954-4DAC-A283-3A62878BF16F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockAssist", "DockAssist\DockAssist.csproj", "{E186B710-E948-4476-9E02-BDE53B655E4D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -96,6 +98,8 @@ Global
 		{1D82F07B-3C3F-4B1B-8042-6ADBE39A715A}.Debug|x64.Build.0 = Debug|x64
 		{576080B5-7954-4DAC-A283-3A62878BF16F}.Debug|x64.ActiveCfg = Debug|x64
 		{576080B5-7954-4DAC-A283-3A62878BF16F}.Debug|x64.Build.0 = Debug|x64
+		{E186B710-E948-4476-9E02-BDE53B655E4D}.Debug|x64.ActiveCfg = Debug|x64
+		{E186B710-E948-4476-9E02-BDE53B655E4D}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
