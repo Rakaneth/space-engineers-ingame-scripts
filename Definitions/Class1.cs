@@ -141,6 +141,8 @@ namespace IngameScript
                 defTable.Add("SmallNato", new ItemInfo(smallNato, smallNatoBP));
                 defTable.Add("Superconductor", new ItemInfo(superConductor, superConductorBP));
                 defTable.Add("ThrusterComp", new ItemInfo(thrusterComp, thrusterBP));
+                defTable.Add("Ice", new ItemInfo(ice, new MyDefinitionId()));
+                defTable.Add("Stone", new ItemInfo(stone, new MyDefinitionId()));
             }
 
             public MyItemType GetItemType(string id) => defTable[id].ItemType;
