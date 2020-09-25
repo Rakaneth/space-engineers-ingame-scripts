@@ -55,7 +55,10 @@ namespace IngameScript
                 GridTerminalSystem.GetBlocksOfType(inventories, i => i.HasInventory && MyIni.HasSection(i.CustomData, "RestockSource"));
                 
                 if (inventories.Count == 0)
-                    throw new Exception("No source containers configured");
+                {
+                    Echo("No source containers found; aborting.");
+                    return;
+                }
 
                 var startTime = DateTime.Now;
                 var keyList = new List<MyIniKey>();

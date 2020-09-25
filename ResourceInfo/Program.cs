@@ -71,11 +71,11 @@ namespace IngameScript
             MyFixedPoint Stone = 0;
             MyFixedPoint Gravel = 0;
 
-
             foreach (var block in blox)
             {
-                for (int i=0; i<block.InventoryCount; i++)
+                for (int i = 0; i < block.InventoryCount; i++)
                 {
+
                     var inv = block.GetInventory(i);
                     Fe += inv.GetItemAmount(defs.iron);
                     Si += inv.GetItemAmount(defs.silicon);
@@ -98,29 +98,27 @@ namespace IngameScript
                     PtOre += inv.GetItemAmount(defs.platinumOre);
                     Stone += inv.GetItemAmount(defs.stone);
                     Gravel += inv.GetItemAmount(defs.gravel);
-                }
-
-                sb.Append($"{Me.CubeGrid.CustomName} Ingot Resources (units in kg)\n");
-                sb.Append("------------------------------------\n\n");
-                sb.Append($"{"Resource",-10}{"Ore",-15}{"Ingot",-15}\n");
-                sb.Append(tableFormat("Iron", FeOre, Fe));
-                sb.Append(tableFormat("Silicon", SiOre, Si));
-                sb.Append(tableFormat("Nickel", NiOre, Ni));
-                sb.Append(tableFormat("Cobalt", CoOre, Co));
-                sb.Append(tableFormat("Gold", AuOre, Au));
-                sb.Append(tableFormat("Uranium", UOre, U));
-                sb.Append(tableFormat("Magnesium", MgOre, Mg));
-                sb.Append(tableFormat("Platinum", PtOre, Pt));
-                sb.Append(tableFormat("Silver", AgOre, Ag));
-                sb.Append($"{"Ice",-10}{(double)Ice,-15:F2}\n");
-                sb.Append($"{"Stone",-10}{(double)Stone,-15:F2}\n");
-                sb.Append($"{"Gravel",-10}{(double)Gravel,-15:F2}\n");
-                
-                foreach(var display in panels)
-                    display.WriteText(sb);
-                
-                sb.Clear();
+                }      
             }
+            sb.Clear();
+            sb.Append($"{Me.CubeGrid.CustomName} Ingot Resources (units in kg)\n");
+            sb.Append("------------------------------------\n\n");
+            sb.Append($"{"Resource",-10}{"Ore",-15}{"Ingot",-15}\n");
+            sb.Append(tableFormat("Iron", FeOre, Fe));
+            sb.Append(tableFormat("Silicon", SiOre, Si));
+            sb.Append(tableFormat("Nickel", NiOre, Ni));
+            sb.Append(tableFormat("Cobalt", CoOre, Co));
+            sb.Append(tableFormat("Gold", AuOre, Au));
+            sb.Append(tableFormat("Uranium", UOre, U));
+            sb.Append(tableFormat("Magnesium", MgOre, Mg));
+            sb.Append(tableFormat("Platinum", PtOre, Pt));
+            sb.Append(tableFormat("Silver", AgOre, Ag));
+            sb.Append($"{"Ice",-10}{(double)Ice,-15:F2}\n");
+            sb.Append($"{"Stone",-10}{(double)Stone,-15:F2}\n");
+            sb.Append($"{"Gravel",-10}{(double)Gravel,-15:F2}\n");
+            
+            foreach (var display in panels)
+                display.WriteText(sb);
         }
     }
 }

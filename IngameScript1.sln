@@ -45,6 +45,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThrusterInfo", "ThrusterInf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DockAssist", "DockAssist\DockAssist.csproj", "{E186B710-E948-4476-9E02-BDE53B655E4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPilotAssist", "AutoPilotAssist\AutoPilotAssist.csproj", "{C811BDD9-F216-4E4C-B608-DB314777BAB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H2GenManager", "H2GenManager\H2GenManager.csproj", "{BBBD1FCB-FE5C-4F76-B354-783A97D2F5F9}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -100,6 +104,10 @@ Global
 		{576080B5-7954-4DAC-A283-3A62878BF16F}.Debug|x64.Build.0 = Debug|x64
 		{E186B710-E948-4476-9E02-BDE53B655E4D}.Debug|x64.ActiveCfg = Debug|x64
 		{E186B710-E948-4476-9E02-BDE53B655E4D}.Debug|x64.Build.0 = Debug|x64
+		{C811BDD9-F216-4E4C-B608-DB314777BAB0}.Debug|x64.ActiveCfg = Debug|x64
+		{C811BDD9-F216-4E4C-B608-DB314777BAB0}.Debug|x64.Build.0 = Debug|x64
+		{BBBD1FCB-FE5C-4F76-B354-783A97D2F5F9}.Debug|x64.ActiveCfg = Debug|x64
+		{BBBD1FCB-FE5C-4F76-B354-783A97D2F5F9}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -37,19 +37,48 @@ namespace IngameScript
         public Program()
         {
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
-            MyIniParseResult result;
-            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => assembler.IsSameConstructAs(Me) && MyIni.HasSection(assembler.CustomData, "Factory"));
-            GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me));
-            GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
+
             myDisplay = Me.GetSurface(0);
             sb = new StringBuilder();
-
-            if (assemblers.Count == 0)
-                throw new Exception("No assemblers found");
                 
             table = new Dictionary<string, int>();
             inProduction = new List<string>();
 
+            UpdateBlocks();
+
+            Me.CustomData = @"[Stocks]
+BulletproofGlass=0
+Computer=0
+Concrete=0
+ConstructionComp=0
+DetectorComp=0
+Display=0
+Girder=0
+GravityComp=0
+InteriorPlate=0
+LargeTube=0
+MedicalComp=0
+MetalGrid=0
+Missile=0
+Motor=0
+PowerCell=0
+RadioComm=0
+ReactorComp=0
+SmallTube=0
+SolarCell=0
+SteelPlate=0
+BigNato=0
+SmallNato=0
+ThrusterComp=0
+Superconductor=0
+---";
+            myDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+            myDisplay.WriteText("Auto Assembler");
+        }
+
+        private void UpdateStocks()
+        {
+            MyIniParseResult result;
             if (!ini.TryParse(Me.CustomData, out result))
                 throw new Exception(result.ToString());
             else
@@ -58,21 +87,50 @@ namespace IngameScript
             var iniKeys = new List<MyIniKey>();
             ini.GetKeys(iniKeys);
 
-            for (int i=0; i<iniKeys.Count; i++)
+            for (int i = 0; i < iniKeys.Count; i++)
             {
                 var key = iniKeys[i];
                 Echo(key.ToString());
-                table.Add(key.Name, ini.Get(key).ToInt32());
+                table[key.Name] = ini.Get(key).ToInt32();
             }
+        }
 
+        private void UpdateBlocks()
+        {
+            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => assembler.IsSameConstructAs(Me) && MyIni.HasSection(assembler.CustomData, "Factory"));
+            GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
+            if (assemblers.Count == 0)
+                Echo("No assemblers found");
+            else 
+            {
+                Echo($"Assembler count: {assemblers.Count}");
+                foreach(var assembler in assemblers)
+                {
+                    Echo(assembler.CustomName);
+                }
+            }
+                
+            
             foreach (var display in displays)
                 display.ContentType = ContentType.TEXT_AND_IMAGE;
-
-            myDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
         }
 
         public void Main(string argument, UpdateType updateSource)
         {
+            var arg = argument.ToLower();
+            if (arg == "setup stocks")
+            {
+                UpdateStocks();
+                return;
+            }
+
+            if (arg == "setup blocks")
+            {
+                UpdateBlocks();
+                return;
+            }
+
             var prodString = inProduction.Count > 0 ? string.Join(", ", inProduction.ToArray()) : "Nothing";
             Echo($"In Production: {prodString}");
             sb.AppendLine($"In Production: {prodString}");
@@ -143,7 +201,10 @@ namespace IngameScript
             int remainder;
             var amtPerAssembler = Math.DivRem((int)amt, assemblers.Count, out remainder);
             foreach (var assembler in assemblers)
+            {
                 assembler.AddQueueItem(bp, (MyFixedPoint)amtPerAssembler);
+            }
+            
 
             if (remainder > 0)
             {

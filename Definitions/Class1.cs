@@ -81,6 +81,7 @@ namespace IngameScript
             public readonly MyItemType steelPlate = new MyItemType(compBase, "SteelPlate");
             public readonly MyItemType superConductor = new MyItemType(compBase, "Superconductor");
             public readonly MyItemType thrusterComp = new MyItemType(compBase, "Thrust");
+            public readonly MyItemType concrete = new MyItemType(compBase, "Concrete"); //Concrete Block Mod
 
             public readonly MyItemType bigNato = new MyItemType(ammoBase, "NATO_25x184mm");
             public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
@@ -109,6 +110,7 @@ namespace IngameScript
             public readonly MyDefinitionId superConductorBP = MyDefinitionId.Parse($"{bpBase}/Superconductor");
             public readonly MyDefinitionId thrusterBP = MyDefinitionId.Parse($"{bpBase}/ThrustComponent");
             public readonly MyDefinitionId missileBP = MyDefinitionId.Parse($"{bpBase}/Missile200mm");
+            public readonly MyDefinitionId concreteBP = MyDefinitionId.Parse($"{bpBase}/ConcreteComponent"); //Concrete Mod
 
             public readonly MyDefinitionId electricity = MyDefinitionId.Parse($"{gasBase}/Electricity");
             public readonly MyDefinitionId hydrogen = MyDefinitionId.Parse($"{gasBase}/Oxygen");
@@ -143,6 +145,7 @@ namespace IngameScript
                 defTable.Add("ThrusterComp", new ItemInfo(thrusterComp, thrusterBP));
                 defTable.Add("Ice", new ItemInfo(ice, new MyDefinitionId()));
                 defTable.Add("Stone", new ItemInfo(stone, new MyDefinitionId()));
+                defTable.Add("Concrete", new ItemInfo(concrete, concreteBP));
             }
 
             public MyItemType GetItemType(string id) => defTable[id].ItemType;

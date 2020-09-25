@@ -1,0 +1,8 @@
+﻿R e a d m e
+-----------
+
+Add [AutoPilotAssist] to the Custom Data of any remote control block
+that you wish to issue commands to.
+
+Commands (given in arguments to main):
+SPEED <number> sets the max speed to a number.
