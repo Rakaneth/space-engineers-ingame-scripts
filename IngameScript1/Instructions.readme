@@ -1,23 +1,31 @@
-﻿Rakaneth's AutoAssembler v2.2
+﻿Rakaneth's AutoAssembler v2.9
 -----------
 
 -Use the following INI template for the programmable block's custom data.
-The script will add this template automatically and reset it upon recompiling.
+The script will add this template automatically upon recompiling.
 -Add [Factory] to the custom data of any assemblers you want to be used for auto-production.
 -Add [FactoryDisplay] to the custom data of any LCDs you want to output information about
 what is currently in production. This info is always displayed on the programmable
 block itself.
+-Add [FactoryDisassembler] to the custom data of any assemblers you want to be used for disassembling.
+-Add [FactoryIgnore] to inventories to be ignored for determining current amounts
+(useful for turrets)
 -Run the script manually with "setup stocks" when stock amounts are changed.
 -Run the script manually with "setup blocks" when block configurations (assemblers,
 LCDs) are changed.
--Recompile the script to completely reset the custom data, which also updates block configuration.
--DO NOT change any text in the script. All customization is done through naming and the
+-Run the script manually with "reset" to reset the custom data. This will also purge the assembler queues.
+-Run the script manually with "clear" to clear the assembler queues.
+-DO NOT change any text in the script. All customization is done through the
 PB's custom data.
+-Some mod blueprints are included. These end in -Mod.
+-The largest stack any single item can produce can be controlled with the MaxStack 
+parameter in the [Config] section.
+
 
 [Stocks]
 BulletproofGlass=0
 Computer=0
-Concrete=0
+ConcreteMod=0
 ConstructionComp=0
 DetectorComp=0
 Display=0
@@ -39,4 +47,13 @@ BigNato=0
 SmallNato=0
 ThrusterComp=0
 Superconductor=0
+Wolfram40mmMod=0
+HydrogenBottle=0
+OxygenBottle=0
+EliteWelder=0
+EliteGrinder=0
+EliteDrill=0
+
+[Config]
+MaxStack=5000
 ---

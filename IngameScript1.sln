@@ -49,6 +49,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoPilotAssist", "AutoPilo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H2GenManager", "H2GenManager\H2GenManager.csproj", "{BBBD1FCB-FE5C-4F76-B354-783A97D2F5F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModifiedRDAV", "ModifiedRDAV\ModifiedRDAV.csproj", "{74404A37-FFC0-46F1-AB08-C21027396FC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JumpDriveInfo", "JumpDriveInfo\JumpDriveInfo.csproj", "{86CA39CD-582E-4149-AE8A-4C4B874164C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteCommand", "RemoteCommand\RemoteCommand.csproj", "{014D5712-EF99-46A1-A140-8FF827A19D5D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
@@ -108,6 +114,12 @@ Global
 		{C811BDD9-F216-4E4C-B608-DB314777BAB0}.Debug|x64.Build.0 = Debug|x64
 		{BBBD1FCB-FE5C-4F76-B354-783A97D2F5F9}.Debug|x64.ActiveCfg = Debug|x64
 		{BBBD1FCB-FE5C-4F76-B354-783A97D2F5F9}.Debug|x64.Build.0 = Debug|x64
+		{74404A37-FFC0-46F1-AB08-C21027396FC9}.Debug|x64.ActiveCfg = Debug|x64
+		{74404A37-FFC0-46F1-AB08-C21027396FC9}.Debug|x64.Build.0 = Debug|x64
+		{86CA39CD-582E-4149-AE8A-4C4B874164C6}.Debug|x64.ActiveCfg = Debug|x64
+		{86CA39CD-582E-4149-AE8A-4C4B874164C6}.Debug|x64.Build.0 = Debug|x64
+		{014D5712-EF99-46A1-A140-8FF827A19D5D}.Debug|x64.ActiveCfg = Debug|x64
+		{014D5712-EF99-46A1-A140-8FF827A19D5D}.Debug|x64.Build.0 = Debug|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

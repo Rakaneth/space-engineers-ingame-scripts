@@ -1,0 +1,8 @@
+﻿R e a d m e
+-----------
+
+-Add [JumpDriveInfo] to the Custom Data of any LCDs or cockpits you wish to display this info.
+-In the case of cockpits, you can specify "Display=X", where X is the index (counting from zero)
+of the LCD you wish to display the jump drive information to.
+-Recompile the script whenever a change is made to the number of jumpdrives or to the LCDs/cockpits
+displaying jump drive information.

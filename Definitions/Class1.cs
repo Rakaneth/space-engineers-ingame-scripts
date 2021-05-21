@@ -38,6 +38,9 @@ namespace IngameScript
             private const string compBase = "MyObjectBuilder_Component";
             private const string ammoBase = "MyObjectBuilder_AmmoMagazine";
             private const string gasBase = "MyObjectBuilder_GasProperties";
+            private const string hydroBotBase = "MyObjectBuilder_GasContainerObject";
+            private const string oxyBotBase = "MyObjectBuilder_OxygenContainerObject";
+            private const string gunBase = "MyObjectBuilder_PhysicalGunObject";
             public readonly MyItemType iron = new MyItemType(ingotBase, "Iron");
             public readonly MyItemType nickel = new MyItemType(ingotBase, "Nickel");
             public readonly MyItemType silicon = new MyItemType(ingotBase, "Silicon");
@@ -81,7 +84,15 @@ namespace IngameScript
             public readonly MyItemType steelPlate = new MyItemType(compBase, "SteelPlate");
             public readonly MyItemType superConductor = new MyItemType(compBase, "Superconductor");
             public readonly MyItemType thrusterComp = new MyItemType(compBase, "Thrust");
-            public readonly MyItemType concrete = new MyItemType(compBase, "Concrete"); //Concrete Block Mod
+            
+            public readonly MyItemType hydroBottle = new MyItemType(hydroBotBase, "HydrogenBottle");
+            public readonly MyItemType oxyBottle = new MyItemType(oxyBotBase, "OxygenBottle");
+            public readonly MyItemType welder4 = new MyItemType(gunBase, "Welder4Item");
+            public readonly MyItemType grinder4 = new MyItemType(gunBase, "AngleGrinder4Item");
+            public readonly MyItemType drill4 = new MyItemType(gunBase, "HandDrill4Item");
+
+            public readonly MyItemType concrete; //Concrete Mod
+            public readonly MyItemType wolfram; //MWI mod
 
             public readonly MyItemType bigNato = new MyItemType(ammoBase, "NATO_25x184mm");
             public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
@@ -110,7 +121,14 @@ namespace IngameScript
             public readonly MyDefinitionId superConductorBP = MyDefinitionId.Parse($"{bpBase}/Superconductor");
             public readonly MyDefinitionId thrusterBP = MyDefinitionId.Parse($"{bpBase}/ThrustComponent");
             public readonly MyDefinitionId missileBP = MyDefinitionId.Parse($"{bpBase}/Missile200mm");
-            public readonly MyDefinitionId concreteBP = MyDefinitionId.Parse($"{bpBase}/ConcreteComponent"); //Concrete Mod
+            public readonly MyDefinitionId hydroBottleBP = MyDefinitionId.Parse($"{bpBase}/HydrogenBottle");
+            public readonly MyDefinitionId oxyBottleBP = MyDefinitionId.Parse($"{bpBase}/OxygenBottle");
+            public readonly MyDefinitionId welder4BP = MyDefinitionId.Parse($"{bpBase}/Welder4");
+            public readonly MyDefinitionId grinder4BP = MyDefinitionId.Parse($"{bpBase}/AngleGrinder4");
+            public readonly MyDefinitionId drill4BP = MyDefinitionId.Parse($"{bpBase}/HandDrill4");
+
+            public readonly MyDefinitionId concreteBP; //Concrete Mod
+            public readonly MyDefinitionId wolframBP; //MWI mod
 
             public readonly MyDefinitionId electricity = MyDefinitionId.Parse($"{gasBase}/Electricity");
             public readonly MyDefinitionId hydrogen = MyDefinitionId.Parse($"{gasBase}/Oxygen");
@@ -120,6 +138,7 @@ namespace IngameScript
 
             public Definitions()
             {
+                //vanilla blocks
                 defTable.Add("BulletproofGlass", new ItemInfo(bulletproofGlass, bulletproofGlassBP));
                 defTable.Add("Computer", new ItemInfo(computer, computerBP));
                 defTable.Add("ConstructionComp", new ItemInfo(construction, constructionBP));
@@ -145,7 +164,26 @@ namespace IngameScript
                 defTable.Add("ThrusterComp", new ItemInfo(thrusterComp, thrusterBP));
                 defTable.Add("Ice", new ItemInfo(ice, new MyDefinitionId()));
                 defTable.Add("Stone", new ItemInfo(stone, new MyDefinitionId()));
-                defTable.Add("Concrete", new ItemInfo(concrete, concreteBP));
+                defTable.Add("HydrogenBottle", new ItemInfo(hydroBottle, hydroBottleBP));
+                defTable.Add("OxygenBottle", new ItemInfo(oxyBottle, oxyBottleBP));
+                defTable.Add("EliteWelder", new ItemInfo(welder4, welder4BP));
+                defTable.Add("EliteGrinder", new ItemInfo(grinder4, grinder4BP));
+                defTable.Add("EliteDrill", new ItemInfo(drill4, drill4BP));
+
+                //mod blocks
+                //Concrete Mod
+                if (MyDefinitionId.TryParse($"{bpBase}/ConcreteComponent", out concreteBP))
+                {
+                    concrete = new MyItemType(compBase, "Concrete");
+                    defTable.Add("ConcreteMod", new ItemInfo(concrete, concreteBP));
+                }
+
+                //MWI mod
+                if (MyDefinitionId.TryParse($"{bpBase}/WolfSlug40mm_Blueprint", out wolframBP))
+                {
+                    wolfram = new MyItemType(ammoBase, "WolfSlug40mm");
+                    defTable.Add("Wolfram40mmMod", new ItemInfo(wolfram, wolframBP));
+                }
             }
 
             public MyItemType GetItemType(string id) => defTable[id].ItemType;
