@@ -24,6 +24,7 @@ parameter in the [Config] section.
 
 [Stocks]
 BulletproofGlass=0
+Canvas=0
 Computer=0
 ConcreteMod=0
 ConstructionComp=0

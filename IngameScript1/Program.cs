@@ -24,7 +24,7 @@ namespace IngameScript
     {
         MyIni ini = new MyIni();
         Dictionary<string, int> table;
-        List<string> inProduction; 
+        List<string> inProduction;
         //IMyInventory cargoInv;
         Definitions defs = new Definitions();
         List<IMyProductionBlock> assemblers = new List<IMyProductionBlock>();
@@ -38,6 +38,7 @@ namespace IngameScript
         const string V = "2.9";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
+Canvas=0
 Computer=0
 ConstructionComp=0
 DetectorComp=0
@@ -79,7 +80,7 @@ MaxStack=5000
             sb = new StringBuilder();
             table = new Dictionary<string, int>();
             inProduction = new List<string>();
-            
+
             UpdateBlocks();
 
             if (string.IsNullOrEmpty(Storage) || MyIni.HasSection(Me.CustomData, "Reset"))
@@ -89,9 +90,9 @@ MaxStack=5000
                 Me.CustomData = Storage;
                 UpdateStocks();
             }
-            
+
             myDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
-            
+
         }
 
         public void Save()
@@ -133,13 +134,13 @@ MaxStack=5000
             GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me) && !MyIni.HasSection(block.CustomData, "FactoryIgnore"));
             GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
             GridTerminalSystem.GetBlocksOfType(disassemblers, dis => dis.IsSameConstructAs(Me) && MyIni.HasSection(dis.CustomData, "FactoryDisassembler"));
-            
+
             if (assemblers.Count == 0)
                 Echo("No assemblers found");
-            else 
+            else
             {
                 Echo($"Assembler count: {assemblers.Count}");
-                foreach(var assembler in assemblers)
+                foreach (var assembler in assemblers)
                 {
                     Echo(assembler.CustomName);
                 }
@@ -157,7 +158,7 @@ MaxStack=5000
                     dis.Repeating = true;
                 }
             }
-                     
+
             foreach (var display in displays)
                 display.ContentType = ContentType.TEXT_AND_IMAGE;
         }
@@ -212,7 +213,7 @@ MaxStack=5000
                         amt += inventory.GetInventory(j).GetItemAmount(item);
                     }
                 }
-                
+
                 Echo($"{item.SubtypeId} Minimum: {minimum}");
                 Echo($"{item.SubtypeId} Amt: {amt}");
                 var toQueue = minimum - amt;
@@ -229,9 +230,9 @@ MaxStack=5000
                         if (amt + alreadyQueued < minimum)
                         {
                             divideAndQueue(thing, minimum - alreadyQueued - amt, assemblers);
-                        }   
+                        }
                     }
-                    else 
+                    else
                     {
                         Echo($"Queuing up ${toQueue} {itemID}");
                         divideAndQueue(thing, toQueue, assemblers);
@@ -246,14 +247,14 @@ MaxStack=5000
                         RemoveFromQueue(thing, assemblers, stillQueued);
                     inProduction.Remove(itemID);
                 }
-               
+
                 amt = 0;
             }
             myDisplay.WriteText(sb);
-            
+
             foreach (var display in displays)
                 display.WriteText(sb);
-            
+
             sb.Clear();
         }
 
@@ -266,7 +267,7 @@ MaxStack=5000
                 queueUp(bp, amtPerAssembler, assembler);
                 //assembler.AddQueueItem(bp, (MyFixedPoint)amtPerAssembler);
             }
-            
+
 
             if (remainder > 0)
             {

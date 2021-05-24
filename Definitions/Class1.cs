@@ -51,7 +51,7 @@ namespace IngameScript
             public readonly MyItemType uranium = new MyItemType(ingotBase, "Uranium");
             public readonly MyItemType silver = new MyItemType(ingotBase, "Silver");
             public readonly MyItemType gravel = new MyItemType(ingotBase, "Stone");
-            
+
             public readonly MyItemType ice = new MyItemType(oreBase, "Ice");
             public readonly MyItemType ironOre = new MyItemType(oreBase, "Iron");
             public readonly MyItemType nickelOre = new MyItemType(oreBase, "Nickel");
@@ -63,7 +63,7 @@ namespace IngameScript
             public readonly MyItemType uraniumOre = new MyItemType(oreBase, "Uranium");
             public readonly MyItemType silverOre = new MyItemType(oreBase, "Silver");
             public readonly MyItemType stone = new MyItemType(oreBase, "Stone");
-            
+
             public readonly MyItemType bulletproofGlass = new MyItemType(compBase, "BulletproofGlass");
             public readonly MyItemType computer = new MyItemType(compBase, "Computer");
             public readonly MyItemType construction = new MyItemType(compBase, "Construction");
@@ -84,12 +84,13 @@ namespace IngameScript
             public readonly MyItemType steelPlate = new MyItemType(compBase, "SteelPlate");
             public readonly MyItemType superConductor = new MyItemType(compBase, "Superconductor");
             public readonly MyItemType thrusterComp = new MyItemType(compBase, "Thrust");
-            
+
             public readonly MyItemType hydroBottle = new MyItemType(hydroBotBase, "HydrogenBottle");
             public readonly MyItemType oxyBottle = new MyItemType(oxyBotBase, "OxygenBottle");
             public readonly MyItemType welder4 = new MyItemType(gunBase, "Welder4Item");
             public readonly MyItemType grinder4 = new MyItemType(gunBase, "AngleGrinder4Item");
             public readonly MyItemType drill4 = new MyItemType(gunBase, "HandDrill4Item");
+            public readonly MyItemType canvas = new MyItemType(compBase, "Canvas");
 
             public readonly MyItemType concrete; //Concrete Mod
             public readonly MyItemType wolfram; //MWI mod
@@ -126,13 +127,14 @@ namespace IngameScript
             public readonly MyDefinitionId welder4BP = MyDefinitionId.Parse($"{bpBase}/Welder4");
             public readonly MyDefinitionId grinder4BP = MyDefinitionId.Parse($"{bpBase}/AngleGrinder4");
             public readonly MyDefinitionId drill4BP = MyDefinitionId.Parse($"{bpBase}/HandDrill4");
+            public readonly MyDefinitionId canvasBP = MyDefinitionId.Parse($"{bpBase}/Canvas");
 
             public readonly MyDefinitionId concreteBP; //Concrete Mod
             public readonly MyDefinitionId wolframBP; //MWI mod
 
             public readonly MyDefinitionId electricity = MyDefinitionId.Parse($"{gasBase}/Electricity");
             public readonly MyDefinitionId hydrogen = MyDefinitionId.Parse($"{gasBase}/Oxygen");
-            
+
 
             private readonly Dictionary<string, ItemInfo> defTable = new Dictionary<string, ItemInfo>();
 
@@ -169,6 +171,7 @@ namespace IngameScript
                 defTable.Add("EliteWelder", new ItemInfo(welder4, welder4BP));
                 defTable.Add("EliteGrinder", new ItemInfo(grinder4, grinder4BP));
                 defTable.Add("EliteDrill", new ItemInfo(drill4, drill4BP));
+                defTable.Add("Canvas", new ItemInfo(canvas, canvasBP));
 
                 //mod blocks
                 //Concrete Mod
