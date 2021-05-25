@@ -140,8 +140,8 @@ MaxStack=5000
             GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me) && !MyIni.HasSection(block.CustomData, "FactoryIgnore"));
             GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
             GridTerminalSystem.GetBlocksOfType(disassemblers, dis => dis.IsSameConstructAs(Me) && MyIni.HasSection(dis.CustomData, "FactoryDisassembler"));
-            GridTerminalSystem.GetBlocksOfType(oreDisplays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "OreDisplay"));
-            GridTerminalSystem.GetBlocksOfType(ingotDisplays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "IngotDisplay"));
+            GridTerminalSystem.GetBlocksOfType(oreDisplays, od => od.IsSameConstructAs(Me) && MyIni.HasSection(od.CustomData, "OreDisplay"));
+            GridTerminalSystem.GetBlocksOfType(ingotDisplays, id => id.IsSameConstructAs(Me) && MyIni.HasSection(id.CustomData, "IngotDisplay"));
 
             if (assemblers.Count == 0)
                 Echo("No assemblers found");
@@ -432,13 +432,13 @@ MaxStack=5000
             }
 
             foreach (var d in dList)
-                d.WriteText(sb);
+                d.WriteText(workingSB);
 
         }
 
         private string drawResource(string resName, MyFixedPoint amt)
         {
-            return $"{resName:10}{amt:F2}";
+            return $"{resName,-20}{(float)amt,-1:N2}";
         }
     }
 }
