@@ -32,10 +32,14 @@ namespace IngameScript
         List<IMyTerminalBlock> inventories = new List<IMyTerminalBlock>();
         IMyTextSurface myDisplay;
         StringBuilder sb;
+        StringBuilder oreSB;
+        StringBuilder ingotSB;
         List<MyProductionItem> queue = new List<MyProductionItem>();
         List<IMyTextPanel> displays = new List<IMyTextPanel>();
+        List<IMyTextPanel> oreDisplays = new List<IMyTextPanel>();
+        List<IMyTextPanel> ingotDisplays = new List<IMyTextPanel>();
         MyFixedPoint maxStack;
-        const string V = "2.9";
+        const string V = "2.10";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
 Canvas=0
@@ -78,6 +82,8 @@ MaxStack=5000
             Runtime.UpdateFrequency |= UpdateFrequency.Update100;
             myDisplay = Me.GetSurface(0);
             sb = new StringBuilder();
+            oreSB = new StringBuilder();
+            ingotSB = new StringBuilder();
             table = new Dictionary<string, int>();
             inProduction = new List<string>();
 
@@ -134,6 +140,8 @@ MaxStack=5000
             GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me) && !MyIni.HasSection(block.CustomData, "FactoryIgnore"));
             GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
             GridTerminalSystem.GetBlocksOfType(disassemblers, dis => dis.IsSameConstructAs(Me) && MyIni.HasSection(dis.CustomData, "FactoryDisassembler"));
+            GridTerminalSystem.GetBlocksOfType(oreDisplays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "OreDisplay"));
+            GridTerminalSystem.GetBlocksOfType(ingotDisplays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "IngotDisplay"));
 
             if (assemblers.Count == 0)
                 Echo("No assemblers found");
@@ -161,6 +169,12 @@ MaxStack=5000
 
             foreach (var display in displays)
                 display.ContentType = ContentType.TEXT_AND_IMAGE;
+
+            foreach (var oreDisplay in oreDisplays)
+                oreDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+
+            foreach (var ingotDisplay in ingotDisplays)
+                ingotDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
         }
 
         public void Main(string argument, UpdateType updateSource)
@@ -255,6 +269,8 @@ MaxStack=5000
             foreach (var display in displays)
                 display.WriteText(sb);
 
+
+            UpdateResourceDisplays();
             sb.Clear();
         }
 
@@ -315,6 +331,114 @@ MaxStack=5000
                 var idx = queue.FindIndex(q => q.BlueprintId == bp);
                 assembler.RemoveQueueItem(idx, amt);
             }
+        }
+
+        private void UpdateResourceDisplays()
+        {
+            if (ingotDisplays.Count > 0)
+                UpdateDisplays();
+
+            if (oreDisplays.Count > 0)
+                UpdateDisplays(false);
+        }
+
+        private void UpdateDisplays(bool ingots = true)
+        {
+
+            MyFixedPoint gravel = 0;
+            MyFixedPoint stone = 0;
+            MyFixedPoint ice = 0;
+            MyFixedPoint fe = 0;
+            MyFixedPoint si = 0;
+            MyFixedPoint ni = 0;
+            MyFixedPoint co = 0;
+            MyFixedPoint mg = 0;
+            MyFixedPoint au = 0;
+            MyFixedPoint ag = 0;
+            MyFixedPoint pt = 0;
+            MyFixedPoint u = 0;
+
+            foreach (var inv in inventories)
+            {
+                for (int i = 0; i < inv.InventoryCount; i++)
+                {
+                    var workingInv = inv.GetInventory(i);
+                    if (ingots)
+                    {
+                        gravel += workingInv.GetItemAmount(defs.gravel);
+                        fe += workingInv.GetItemAmount(defs.iron);
+                        si += workingInv.GetItemAmount(defs.silicon);
+                        ni += workingInv.GetItemAmount(defs.nickel);
+                        co += workingInv.GetItemAmount(defs.cobalt);
+                        mg += workingInv.GetItemAmount(defs.magnesium);
+                        au += workingInv.GetItemAmount(defs.gold);
+                        ag += workingInv.GetItemAmount(defs.silver);
+                        pt += workingInv.GetItemAmount(defs.platinum);
+                        u += workingInv.GetItemAmount(defs.uranium);
+                    }
+                    else
+                    {
+                        stone += workingInv.GetItemAmount(defs.stone);
+                        ice += workingInv.GetItemAmount(defs.ice);
+                        fe += workingInv.GetItemAmount(defs.ironOre);
+                        si += workingInv.GetItemAmount(defs.siliconOre);
+                        ni += workingInv.GetItemAmount(defs.nickelOre);
+                        co += workingInv.GetItemAmount(defs.cobaltOre);
+                        mg += workingInv.GetItemAmount(defs.magnesiumOre);
+                        au += workingInv.GetItemAmount(defs.goldOre);
+                        ag += workingInv.GetItemAmount(defs.silverOre);
+                        pt += workingInv.GetItemAmount(defs.platinumOre);
+                        u += workingInv.GetItemAmount(defs.uranium);
+                    }
+                }
+            }
+
+            var bar = "------------------";
+            string firstLine = "";
+            StringBuilder workingSB;
+            List<IMyTextPanel> dList;
+
+            if (ingots)
+            {
+                workingSB = ingotSB;
+                firstLine = "Ingot";
+                dList = ingotDisplays;
+            }
+            else
+            {
+                workingSB = oreSB;
+                firstLine = "Ore";
+                dList = oreDisplays;
+            }
+
+            workingSB.Clear();
+            workingSB.AppendLine($"{firstLine} Inventory");
+            workingSB.AppendLine(bar);
+            workingSB.AppendLine(drawResource("Iron", fe));
+            workingSB.AppendLine(drawResource("Silicon", si));
+            workingSB.AppendLine(drawResource("Nickel", ni));
+            workingSB.AppendLine(drawResource("Cobalt", co));
+            workingSB.AppendLine(drawResource("Magnesium", mg));
+            workingSB.AppendLine(drawResource("Silver", ag));
+            workingSB.AppendLine(drawResource("Gold", au));
+            workingSB.AppendLine(drawResource("Platinum", pt));
+            workingSB.AppendLine(drawResource("Uranium", u));
+            if (ingots)
+                workingSB.AppendLine(drawResource("Gravel", gravel));
+            else
+            {
+                workingSB.AppendLine(drawResource("Stone", stone));
+                workingSB.AppendLine(drawResource("Ice", ice));
+            }
+
+            foreach (var d in dList)
+                d.WriteText(sb);
+
+        }
+
+        private string drawResource(string resName, MyFixedPoint amt)
+        {
+            return $"{resName:10}{amt:F2}";
         }
     }
 }

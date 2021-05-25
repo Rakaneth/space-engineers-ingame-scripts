@@ -14,6 +14,7 @@ using VRage.Game.ModAPI.Ingame.Utilities;
 using VRage.Game.ObjectBuilders.Definitions;
 using VRage.Game;
 using VRageMath;
+using VRage;
 
 namespace IngameScript
 {
@@ -192,6 +193,24 @@ namespace IngameScript
             public MyItemType GetItemType(string id) => defTable[id].ItemType;
             public MyDefinitionId GetDefinitionId(string id) => defTable[id].DefID;
 
+            public MyFixedPoint GetItemAmt(List<IMyTerminalBlock> inventories, MyItemType item)
+            {
+                MyFixedPoint amt = 0;
+                foreach (var inv in inventories)
+                {
+                    for (int j = 0; j < inv.InventoryCount; j++)
+                    {
+                        amt += inv.GetInventory(j).GetItemAmount(item);
+                    }
+                }
+
+                return amt;
+            }
+
+            public MyFixedPoint GetItemAmt(List<IMyTerminalBlock> inventories, string itemID)
+            {
+                return GetItemAmt(inventories, GetItemType(itemID));
+            }
 
         }
     }

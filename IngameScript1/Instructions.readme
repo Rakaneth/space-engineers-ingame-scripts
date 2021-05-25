@@ -1,4 +1,4 @@
-﻿Rakaneth's AutoAssembler v2.9
+﻿Rakaneth's AutoAssembler v2.10
 -----------
 
 -Use the following INI template for the programmable block's custom data.
@@ -10,6 +10,8 @@ block itself.
 -Add [FactoryDisassembler] to the custom data of any assemblers you want to be used for disassembling.
 -Add [FactoryIgnore] to inventories to be ignored for determining current amounts
 (useful for turrets)
+-Add [IngotDisplay] to the custom data of any LCDs that should display ingot resources.
+-Add [OreDisplay] to the custom data of any LCDs that should display ore resources.
 -Run the script manually with "setup stocks" when stock amounts are changed.
 -Run the script manually with "setup blocks" when block configurations (assemblers,
 LCDs) are changed.
@@ -20,6 +22,7 @@ PB's custom data.
 -Some mod blueprints are included. These end in -Mod.
 -The largest stack any single item can produce can be controlled with the MaxStack 
 parameter in the [Config] section.
+
 
 
 [Stocks]
