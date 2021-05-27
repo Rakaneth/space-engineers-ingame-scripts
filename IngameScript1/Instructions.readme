@@ -1,4 +1,4 @@
-﻿Rakaneth's AutoAssembler v2.10
+﻿Rakaneth's AutoAssembler v2.12
 -----------
 
 -Use the following INI template for the programmable block's custom data.
@@ -57,6 +57,13 @@ OxygenBottle=0
 EliteWelder=0
 EliteGrinder=0
 EliteDrill=0
+MR20Ammo=0
+MR30EAmmo=0
+MR50AAmmo=0
+MR8PAmmo=0
+S10Ammo=0
+S10EAmmo=0
+S20AAmmo=0
 
 [Config]
 MaxStack=5000

@@ -39,7 +39,7 @@ namespace IngameScript
         List<IMyTextPanel> oreDisplays = new List<IMyTextPanel>();
         List<IMyTextPanel> ingotDisplays = new List<IMyTextPanel>();
         MyFixedPoint maxStack;
-        const string V = "2.10";
+        const string V = "2.12";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
 Canvas=0
@@ -62,7 +62,6 @@ SmallTube=0
 SolarCell=0
 SteelPlate=0
 BigNato=0
-SmallNato=0
 ThrusterComp=0
 Superconductor=0
 Wolfram40mmMod=0
@@ -72,6 +71,13 @@ OxygenBottle=0
 EliteWelder=0
 EliteGrinder=0
 EliteDrill=0
+MR20Ammo=0
+MR30EAmmo=0
+MR50AAmmo=0
+MR8PAmmo=0
+S10Ammo=0
+S10EAmmo=0
+S20AAmmo=0
 
 [Config]
 MaxStack=5000
@@ -143,6 +149,8 @@ MaxStack=5000
             GridTerminalSystem.GetBlocksOfType(oreDisplays, od => od.IsSameConstructAs(Me) && MyIni.HasSection(od.CustomData, "OreDisplay"));
             GridTerminalSystem.GetBlocksOfType(ingotDisplays, id => id.IsSameConstructAs(Me) && MyIni.HasSection(id.CustomData, "IngotDisplay"));
 
+            TagRename("FactoryController", Me);
+
             if (assemblers.Count == 0)
                 Echo("No assemblers found");
             else
@@ -151,6 +159,7 @@ MaxStack=5000
                 foreach (var assembler in assemblers)
                 {
                     Echo(assembler.CustomName);
+                    TagRename("Factory", assembler);
                 }
             }
 
@@ -164,17 +173,30 @@ MaxStack=5000
                     Echo(dis.CustomName);
                     dis.Mode = MyAssemblerMode.Disassembly;
                     dis.Repeating = true;
+                    TagRename("FactoryDisassembler", dis);
                 }
             }
 
             foreach (var display in displays)
+            {
                 display.ContentType = ContentType.TEXT_AND_IMAGE;
+                TagRename("FactoryDisplay", display);
+            }
+
 
             foreach (var oreDisplay in oreDisplays)
+            {
                 oreDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+                TagRename("OreDisplay", oreDisplay);
+            }
+
 
             foreach (var ingotDisplay in ingotDisplays)
+            {
                 ingotDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+                TagRename("IngotDisplay", ingotDisplay);
+            }
+
         }
 
         public void Main(string argument, UpdateType updateSource)
@@ -388,7 +410,7 @@ MaxStack=5000
                         au += workingInv.GetItemAmount(defs.goldOre);
                         ag += workingInv.GetItemAmount(defs.silverOre);
                         pt += workingInv.GetItemAmount(defs.platinumOre);
-                        u += workingInv.GetItemAmount(defs.uranium);
+                        u += workingInv.GetItemAmount(defs.uraniumOre);
                     }
                 }
             }
@@ -434,6 +456,14 @@ MaxStack=5000
             foreach (var d in dList)
                 d.WriteText(workingSB);
 
+        }
+
+        private void TagRename(string tag, IMyTerminalBlock block)
+        {
+            if (!block.CustomName.Contains(tag))
+            {
+                block.CustomName = $"{block.CustomName} [{tag}]";
+            }
         }
 
         private string drawResource(string resName, MyFixedPoint amt)

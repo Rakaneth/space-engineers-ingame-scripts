@@ -97,8 +97,17 @@ namespace IngameScript
             public readonly MyItemType wolfram; //MWI mod
 
             public readonly MyItemType bigNato = new MyItemType(ammoBase, "NATO_25x184mm");
-            public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
+            //public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
             public readonly MyItemType missile = new MyItemType(ammoBase, "Missile200mm");
+            public readonly MyItemType mr8P = new MyItemType(ammoBase, "PreciseAutomaticRifleGun_Mag_5rd");
+            public readonly MyItemType mr30E = new MyItemType(ammoBase, "UltimateAutomaticRifleGun_Mag_30rd");
+            public readonly MyItemType mr20 = new MyItemType(ammoBase,
+            "AutomaticRifleGun_Mag_20rd");
+            public readonly MyItemType mr50A = new MyItemType(ammoBase,
+            "RapidFireAutomaticRifleGun_Mag_50rd");
+            public readonly MyItemType s10 = new MyItemType(ammoBase, "SemiAutoPistolMagazine");
+            public readonly MyItemType s10E = new MyItemType(ammoBase, "ElitePistolMagazine");
+            public readonly MyItemType s20A = new MyItemType(ammoBase, "FullAutoPistolMagazine");
 
             public readonly MyDefinitionId bigNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_25x184mmMagazine");
             public readonly MyDefinitionId smallNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_5p56x45mmMagazine");
@@ -136,6 +145,14 @@ namespace IngameScript
             public readonly MyDefinitionId electricity = MyDefinitionId.Parse($"{gasBase}/Electricity");
             public readonly MyDefinitionId hydrogen = MyDefinitionId.Parse($"{gasBase}/Oxygen");
 
+            public readonly MyDefinitionId mr20MagBP = MyDefinitionId.Parse($"{bpBase}/AutomaticRifleGun_Mag_20rd");
+            public readonly MyDefinitionId mr30MagBP = MyDefinitionId.Parse($"{bpBase}/UltimateAutomaticRifleGun_Mag_30rd");
+            public readonly MyDefinitionId mr50AMagBP = MyDefinitionId.Parse($"{bpBase}/RapidFireAutomaticRifleGun_Mag_50rd");
+            public readonly MyDefinitionId mr8PMagBP = MyDefinitionId.Parse($"{bpBase}/PreciseAutomaticRifleGun_Mag_5rd");
+            public readonly MyDefinitionId s10MagBP = MyDefinitionId.Parse($"{bpBase}/SemiAutoPistolMagazine");
+            public readonly MyDefinitionId s10EMagBP = MyDefinitionId.Parse($"{bpBase}/ElitePistolMagazine");
+            public readonly MyDefinitionId s20AMagBP = MyDefinitionId.Parse($"{bpBase}/FullAutoPistolMagazine");
+
 
             private readonly Dictionary<string, ItemInfo> defTable = new Dictionary<string, ItemInfo>();
 
@@ -162,7 +179,7 @@ namespace IngameScript
                 defTable.Add("SolarCell", new ItemInfo(solarCell, solarCellBP));
                 defTable.Add("SteelPlate", new ItemInfo(steelPlate, steelPlateBP));
                 defTable.Add("BigNato", new ItemInfo(bigNato, bigNatoBP));
-                defTable.Add("SmallNato", new ItemInfo(smallNato, smallNatoBP));
+                //defTable.Add("SmallNato", new ItemInfo(smallNato, smallNatoBP));
                 defTable.Add("Superconductor", new ItemInfo(superConductor, superConductorBP));
                 defTable.Add("ThrusterComp", new ItemInfo(thrusterComp, thrusterBP));
                 defTable.Add("Ice", new ItemInfo(ice, new MyDefinitionId()));
@@ -173,6 +190,13 @@ namespace IngameScript
                 defTable.Add("EliteGrinder", new ItemInfo(grinder4, grinder4BP));
                 defTable.Add("EliteDrill", new ItemInfo(drill4, drill4BP));
                 defTable.Add("Canvas", new ItemInfo(canvas, canvasBP));
+                defTable.Add("MR20Ammo", new ItemInfo(mr20, mr20MagBP));
+                defTable.Add("MR30EAmmo", new ItemInfo(mr30E, mr30MagBP));
+                defTable.Add("MR50AAmmo", new ItemInfo(mr50A, mr50AMagBP));
+                defTable.Add("MR8PAmmo", new ItemInfo(mr8P, mr8PMagBP));
+                defTable.Add("S10Ammo", new ItemInfo(s10, s10MagBP));
+                defTable.Add("S10EAmmo", new ItemInfo(s10E, s10EMagBP));
+                defTable.Add("S20AAmmo", new ItemInfo(s20A, s20AMagBP));
 
                 //mod blocks
                 //Concrete Mod
