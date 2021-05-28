@@ -1,4 +1,4 @@
-﻿Rakaneth's AutoAssembler v2.12
+﻿Rakaneth's AutoAssembler v2.13
 -----------
 
 -Use the following INI template for the programmable block's custom data.
@@ -64,6 +64,7 @@ MR8PAmmo=0
 S10Ammo=0
 S10EAmmo=0
 S20AAmmo=0
+C100Ammo=0
 
 [Config]
 MaxStack=5000

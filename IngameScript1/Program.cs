@@ -78,6 +78,7 @@ MR8PAmmo=0
 S10Ammo=0
 S10EAmmo=0
 S20AAmmo=0
+C100Ammo=0
 
 [Config]
 MaxStack=5000
@@ -230,8 +231,14 @@ MaxStack=5000
                 return;
             }
 
+            if (arg == "defs")
+            {
+                ShowDefs();
+                return;
+            }
+
             var prodString = inProduction.Count > 0 ? string.Join(", ", inProduction.ToArray()) : "Nothing";
-            Echo($"In Production: {prodString}");
+            //Echo($"In Production: {prodString}");
             sb.AppendLine($"In Production: {prodString}");
             var items = table.Keys.ToList();
             MyFixedPoint amt = 0;
@@ -250,10 +257,10 @@ MaxStack=5000
                     }
                 }
 
-                Echo($"{item.SubtypeId} Minimum: {minimum}");
-                Echo($"{item.SubtypeId} Amt: {amt}");
+                //Echo($"{item.SubtypeId} Minimum: {minimum}");
+                //Echo($"{item.SubtypeId} Amt: {amt}");
                 var toQueue = minimum - amt;
-                Echo($"{thing.SubtypeName} to queue: {toQueue}");
+                //Echo($"{thing.SubtypeName} to queue: {toQueue}");
                 queue.Clear();
                 //int amtPerAssembler = Math.DivRem(toQueue.ToIntSafe(), assemblers.Count, out remainder); 
                 if (amt < minimum)
@@ -261,7 +268,7 @@ MaxStack=5000
                     if (inProduction.Contains(itemID))
                     {
                         var alreadyQueued = HowManyQueued(thing, assemblers);
-                        Echo($"{toQueue} {itemID} to go");
+                        //Echo($"{toQueue} {itemID} to go");
                         sb.AppendLine($"{itemID}: {amt} / {minimum} Queued: {alreadyQueued}");
                         if (amt + alreadyQueued < minimum)
                         {
@@ -270,14 +277,14 @@ MaxStack=5000
                     }
                     else
                     {
-                        Echo($"Queuing up ${toQueue} {itemID}");
+                        //Echo($"Queuing up ${toQueue} {itemID}");
                         divideAndQueue(thing, toQueue, assemblers);
                         inProduction.Add(itemID);
                     }
                 }
                 else
                 {
-                    Echo($"Quota of {itemID} has been met; removing");
+                    //Echo($"Quota of {itemID} has been met; removing");
                     var stillQueued = HowManyQueued(thing, assemblers);
                     if (stillQueued > 0)
                         RemoveFromQueue(thing, assemblers, stillQueued);
@@ -469,6 +476,30 @@ MaxStack=5000
         private string drawResource(string resName, MyFixedPoint amt)
         {
             return $"{resName,-20}{(float)amt,-1:N2}";
+        }
+
+        private void ShowDefs()
+        {
+            HashSet<string> set = new HashSet<string>();
+            foreach (var inventory in inventories)
+            {
+                Echo($"{inventory.CustomName}\n---------------------");
+                for (int i = 0; i < inventory.InventoryCount; i++)
+                {
+                    var inv = inventory.GetInventory(i);
+
+                    for (int j = 0; j < inv.ItemCount; j++)
+                    {
+                        var item = inv.GetItemAt(j);
+                        var tString = item?.Type.ToString();
+                        if (!set.Contains(tString))
+                        {
+                            set.Add(tString);
+                            Echo(tString);
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -108,6 +108,7 @@ namespace IngameScript
             public readonly MyItemType s10 = new MyItemType(ammoBase, "SemiAutoPistolMagazine");
             public readonly MyItemType s10E = new MyItemType(ammoBase, "ElitePistolMagazine");
             public readonly MyItemType s20A = new MyItemType(ammoBase, "FullAutoPistolMagazine");
+            public readonly MyItemType c100 = new MyItemType(ammoBase, "C100mmAmmo");
 
             public readonly MyDefinitionId bigNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_25x184mmMagazine");
             public readonly MyDefinitionId smallNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_5p56x45mmMagazine");
@@ -152,6 +153,7 @@ namespace IngameScript
             public readonly MyDefinitionId s10MagBP = MyDefinitionId.Parse($"{bpBase}/SemiAutoPistolMagazine");
             public readonly MyDefinitionId s10EMagBP = MyDefinitionId.Parse($"{bpBase}/ElitePistolMagazine");
             public readonly MyDefinitionId s20AMagBP = MyDefinitionId.Parse($"{bpBase}/FullAutoPistolMagazine");
+            public readonly MyDefinitionId c100BP = MyDefinitionId.Parse($"{bpBase}/C100mmAmmo");
 
 
             private readonly Dictionary<string, ItemInfo> defTable = new Dictionary<string, ItemInfo>();
@@ -197,6 +199,7 @@ namespace IngameScript
                 defTable.Add("S10Ammo", new ItemInfo(s10, s10MagBP));
                 defTable.Add("S10EAmmo", new ItemInfo(s10E, s10EMagBP));
                 defTable.Add("S20AAmmo", new ItemInfo(s20A, s20AMagBP));
+                defTable.Add("C100Ammo", new ItemInfo(c100, c100BP));
 
                 //mod blocks
                 //Concrete Mod
