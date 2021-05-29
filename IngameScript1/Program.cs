@@ -42,7 +42,7 @@ namespace IngameScript
         List<IMyUserControllableGun> guns = new List<IMyUserControllableGun>();
         List<IMyTextPanel> ammoDisplays = new List<IMyTextPanel>();
         MyFixedPoint maxStack;
-        const string V = "2.14";
+        const string V = "2.15";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
 Canvas=0
@@ -249,6 +249,12 @@ MaxStack=5000
             if (arg == "defs")
             {
                 ShowDefs();
+                return;
+            }
+
+            if (arg == "sort")
+            {
+                SortInventories();
                 return;
             }
 
@@ -541,6 +547,41 @@ MaxStack=5000
 
                 foreach (var ad in ammoDisplays)
                     ad.WriteText(gunSB);
+            }
+        }
+
+        private void SortInventories()
+        {
+            var startSortTime = System.DateTime.Now;
+            foreach (var inventory in inventories)
+            {
+                for (int i = 0; i < inventory.InventoryCount; i++)
+                {
+                    StackInventory(inventory.GetInventory(i));
+                }
+            }
+            var endSortTime = DateTime.Now;
+            Echo($"Sort completed in {endSortTime.Subtract(startSortTime).TotalMilliseconds} ms");
+        }
+
+        private void StackInventory(IMyInventory inv)
+        {
+            for (int i = inv.ItemCount - 1; i >= 0; i--)
+            {
+                var item = inv.GetItemAt(i);
+                if (item.HasValue)
+                {
+                    var type = item.Value.Type;
+                    for (int j = 0; j < i; j++)
+                    {
+                        var dup = inv.GetItemAt(j);
+                        if (dup?.Type == type)
+                        {
+                            inv.TransferItemTo(inv, i, j, true);
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
