@@ -34,12 +34,15 @@ namespace IngameScript
         StringBuilder sb;
         StringBuilder oreSB;
         StringBuilder ingotSB;
+        StringBuilder gunSB;
         List<MyProductionItem> queue = new List<MyProductionItem>();
         List<IMyTextPanel> displays = new List<IMyTextPanel>();
         List<IMyTextPanel> oreDisplays = new List<IMyTextPanel>();
         List<IMyTextPanel> ingotDisplays = new List<IMyTextPanel>();
+        List<IMyUserControllableGun> guns = new List<IMyUserControllableGun>();
+        List<IMyTextPanel> ammoDisplays = new List<IMyTextPanel>();
         MyFixedPoint maxStack;
-        const string V = "2.12";
+        const string V = "2.14";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
 Canvas=0
@@ -91,6 +94,7 @@ MaxStack=5000
             sb = new StringBuilder();
             oreSB = new StringBuilder();
             ingotSB = new StringBuilder();
+            gunSB = new StringBuilder();
             table = new Dictionary<string, int>();
             inProduction = new List<string>();
 
@@ -149,6 +153,8 @@ MaxStack=5000
             GridTerminalSystem.GetBlocksOfType(disassemblers, dis => dis.IsSameConstructAs(Me) && MyIni.HasSection(dis.CustomData, "FactoryDisassembler"));
             GridTerminalSystem.GetBlocksOfType(oreDisplays, od => od.IsSameConstructAs(Me) && MyIni.HasSection(od.CustomData, "OreDisplay"));
             GridTerminalSystem.GetBlocksOfType(ingotDisplays, id => id.IsSameConstructAs(Me) && MyIni.HasSection(id.CustomData, "IngotDisplay"));
+            GridTerminalSystem.GetBlocksOfType(guns, gun => gun.IsSameConstructAs(Me));
+            GridTerminalSystem.GetBlocksOfType(ammoDisplays, ad => ad.IsSameConstructAs(Me) && MyIni.HasSection(ad.CustomData, "AmmoDisplay"));
 
             TagRename("FactoryController", Me);
 
@@ -188,6 +194,7 @@ MaxStack=5000
             foreach (var oreDisplay in oreDisplays)
             {
                 oreDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+                oreDisplay.Font = "Monospace";
                 TagRename("OreDisplay", oreDisplay);
             }
 
@@ -195,7 +202,15 @@ MaxStack=5000
             foreach (var ingotDisplay in ingotDisplays)
             {
                 ingotDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+                ingotDisplay.Font = "Monospace";
                 TagRename("IngotDisplay", ingotDisplay);
+            }
+
+            foreach (var ammoDisplay in ammoDisplays)
+            {
+                ammoDisplay.ContentType = ContentType.TEXT_AND_IMAGE;
+                ammoDisplay.Font = "Monospace";
+                TagRename("AmmoDisplay", ammoDisplay);
             }
 
         }
@@ -300,6 +315,7 @@ MaxStack=5000
 
 
             UpdateResourceDisplays();
+            TakeAmmoInventory();
             sb.Clear();
         }
 
@@ -499,6 +515,32 @@ MaxStack=5000
                         }
                     }
                 }
+            }
+        }
+
+        private void TakeAmmoInventory()
+        {
+            if (ammoDisplays.Count > 0)
+            {
+                gunSB.Clear();
+                foreach (var gun in guns)
+                {
+                    gunSB.AppendLine(gun.CustomName);
+                    gunSB.AppendLine("-------------------");
+                    for (int i = 0; i < gun.InventoryCount; i++)
+                    {
+                        var g = gun.GetInventory(i);
+                        for (int j = 0; j < g.ItemCount; j++)
+                        {
+                            var item = g.GetItemAt(j);
+                            gunSB.AppendLine($"{item.Value.Type.SubtypeId}: {item.Value.Amount}");
+                        }
+                        gunSB.AppendLine();
+                    }
+                }
+
+                foreach (var ad in ammoDisplays)
+                    ad.WriteText(gunSB);
             }
         }
     }
