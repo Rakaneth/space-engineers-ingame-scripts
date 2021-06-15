@@ -19,7 +19,7 @@ using VRageMath;
 
 namespace IngameScript
 {
-    
+
     partial class Program : MyGridProgram
     {
         List<IMyPowerProducer> producers = new List<IMyPowerProducer>();
@@ -45,12 +45,12 @@ namespace IngameScript
         const char dash = '-';
         IMyProgrammableBlock displayController;
         MyIni ini;
-        
+
         public Program()
         {
             int bars;
             GridTerminalSystem.GetBlocksOfType(producers, p => p.IsSameConstructAs(Me) && !(p is IMyBatteryBlock));
-            GridTerminalSystem.GetBlocksOfType(tanks, e => e.IsSameConstructAs(Me) && e.Capacity == 5000000f);
+            GridTerminalSystem.GetBlocksOfType(tanks, e => e.IsSameConstructAs(Me) && e.Capacity == 15000000f);
             GridTerminalSystem.GetBlocksOfType(batts, b => b.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(displays, display => MyIni.HasSection(display.CustomData, "PowerReadout") && display.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(cockpits, cockpit => MyIni.HasSection(cockpit.CustomData, "PowerReadout") && cockpit.IsSameConstructAs(Me));
@@ -87,7 +87,7 @@ namespace IngameScript
                 bars = ini.ContainsKey(section, "Bars") ? ini.Get(section, "Bars").ToInt32() : 5;
                 barConfig.Add(eid, bars);
             };
-            
+
             foreach (var displayListEntry in displayLists)
             {
                 foreach (var display in displayListEntry.Value)
@@ -113,11 +113,11 @@ namespace IngameScript
                 barConfig.Add(cockpit.EntityId, bars);
                 sbs.Add(cockpit.EntityId, new StringBuilder());
             }
-                       
-            GridTerminalSystem.GetBlocksOfType(consumers, 
-                consumer => consumer.Components.TryGet(out sink) 
-                && sink.IsPoweredByType(defs.electricity) 
-                && !(consumer is IMyBatteryBlock) 
+
+            GridTerminalSystem.GetBlocksOfType(consumers,
+                consumer => consumer.Components.TryGet(out sink)
+                && sink.IsPoweredByType(defs.electricity)
+                && !(consumer is IMyBatteryBlock)
                 && consumer.BlockDefinition.SubtypeName != "LargeHydrogenEngine");
             var smReact = reactors.Count(e => e.MaxOutput == 15f);
             var lgReact = reactors.Count(e => e.MaxOutput == 300f);
@@ -153,7 +153,7 @@ namespace IngameScript
 
             AddDisplayList($"Total Generated: {generated:N2}/{maxGenerated:N2} MW\n\n", displays, producerDisplays);
             AddDisplayList("Power Sinks\n", displays, consumerDisplays);
-            
+
             foreach (var consumer in consumers)
             {
                 if (consumer.Components.TryGet(out sink))
@@ -189,13 +189,13 @@ namespace IngameScript
                 AddBarList(battStored, battMaxStored, displays, battDisplays);
                 AddDisplayList($" {battStored / battMaxStored * 100:N2}% full\n\n", displays, battDisplays);
             }
- 
+
             if (tanks.Count > 0)
             {
                 AddDisplayList("Hydrogen\n", displays, h2Displays);
 
                 foreach (var tank in tanks)
-                {    
+                {
                     h2Current += tank.FilledRatio;
                     AddDisplayList($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%", h2Displays);
                     AddBarList(tank.FilledRatio, 1, h2Displays);
@@ -250,7 +250,7 @@ namespace IngameScript
         }
 
         private void AddText(string text, IMyEntity entity)
-        {      
+        {
             StringBuilder sb = sbs[entity.EntityId];
             sb.Append(text);
         }
@@ -285,7 +285,7 @@ namespace IngameScript
         private void WriteAll()
         {
             var displayLists = new List<List<IMyTextPanel>>() { displays, battDisplays, h2Displays, o2Displays, reactorDisplays, producerDisplays, consumerDisplays };
-            foreach (var displayList in displayLists) 
+            foreach (var displayList in displayLists)
             {
                 foreach (var display in displayList)
                 {
@@ -299,6 +299,6 @@ namespace IngameScript
                 var sbc = sbs[cockpit.EntityId];
                 cockpit.GetSurface(0).WriteText(sbc);
             }
-        }      
+        }
     }
 }

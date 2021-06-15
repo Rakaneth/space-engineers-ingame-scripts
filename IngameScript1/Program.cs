@@ -41,8 +41,12 @@ namespace IngameScript
         List<IMyTextPanel> ingotDisplays = new List<IMyTextPanel>();
         List<IMyUserControllableGun> guns = new List<IMyUserControllableGun>();
         List<IMyTextPanel> ammoDisplays = new List<IMyTextPanel>();
+        List<IMyCargoContainer> ingotStorage = new List<IMyCargoContainer>();
+        List<IMyCargoContainer> outputStorage = new List<IMyCargoContainer>();
+        List<IMyRefinery> refineries = new List<IMyRefinery>();
+        List<MyInventoryItem> workingItems = new List<MyInventoryItem>();
         MyFixedPoint maxStack;
-        const string V = "2.15";
+        const string V = "2.16";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
 Canvas=0
@@ -145,16 +149,24 @@ MaxStack=5000
             maxStack = ini.Get("Config", "MaxStack").ToInt32();
         }
 
+        private bool TestForTag(IMyTerminalBlock block, string tag)
+        {
+            return block.IsSameConstructAs(Me) && MyIni.HasSection(block.CustomData, tag);
+        }
+
         private void UpdateBlocks()
         {
-            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => assembler.IsSameConstructAs(Me) && MyIni.HasSection(assembler.CustomData, "Factory"));
+            GridTerminalSystem.GetBlocksOfType(assemblers, assembler => TestForTag(assembler, "Factory"));
             GridTerminalSystem.GetBlocksOfType(inventories, block => block.HasInventory && block.IsSameConstructAs(Me) && !MyIni.HasSection(block.CustomData, "FactoryIgnore"));
-            GridTerminalSystem.GetBlocksOfType(displays, display => display.IsSameConstructAs(Me) && MyIni.HasSection(display.CustomData, "FactoryDisplay"));
-            GridTerminalSystem.GetBlocksOfType(disassemblers, dis => dis.IsSameConstructAs(Me) && MyIni.HasSection(dis.CustomData, "FactoryDisassembler"));
-            GridTerminalSystem.GetBlocksOfType(oreDisplays, od => od.IsSameConstructAs(Me) && MyIni.HasSection(od.CustomData, "OreDisplay"));
-            GridTerminalSystem.GetBlocksOfType(ingotDisplays, id => id.IsSameConstructAs(Me) && MyIni.HasSection(id.CustomData, "IngotDisplay"));
+            GridTerminalSystem.GetBlocksOfType(displays, display => TestForTag(display, "FactoryDisplay"));
+            GridTerminalSystem.GetBlocksOfType(disassemblers, dis => TestForTag(dis, "FactoryDisassembler"));
+            GridTerminalSystem.GetBlocksOfType(oreDisplays, od => TestForTag(od, "OreDisplay"));
+            GridTerminalSystem.GetBlocksOfType(ingotDisplays, id => TestForTag(id, "IngotDisplay"));
             GridTerminalSystem.GetBlocksOfType(guns, gun => gun.IsSameConstructAs(Me));
-            GridTerminalSystem.GetBlocksOfType(ammoDisplays, ad => ad.IsSameConstructAs(Me) && MyIni.HasSection(ad.CustomData, "AmmoDisplay"));
+            GridTerminalSystem.GetBlocksOfType(ammoDisplays, ad => TestForTag(ad, "AmmoDisplay"));
+            GridTerminalSystem.GetBlocksOfType(ingotStorage, ins => TestForTag(ins, "IngotStorage"));
+            GridTerminalSystem.GetBlocksOfType(outputStorage, ous => TestForTag(ous, "OutputStorage"));
+            GridTerminalSystem.GetBlocksOfType(refineries, r => r.IsSameConstructAs(Me));
 
             TagRename("FactoryController", Me);
 
@@ -184,12 +196,35 @@ MaxStack=5000
                 }
             }
 
+            if (ingotStorage.Count == 0)
+                Echo("No ingot storage found");
+            else
+            {
+                Echo($"Ingot Storage count: {ingotStorage.Count}");
+                foreach (var ins in ingotStorage)
+                {
+                    Echo(ins.CustomName);
+                    TagRename("IngotStorage", ins);
+                }
+            }
+
+            if (outputStorage.Count == 0)
+                Echo("No output storage found");
+            else
+            {
+                Echo($"Output Storage count: {outputStorage.Count}");
+                foreach (var ous in outputStorage)
+                {
+                    Echo(ous.CustomName);
+                    TagRename("OutputStorage", ous);
+                }
+            }
+
             foreach (var display in displays)
             {
                 display.ContentType = ContentType.TEXT_AND_IMAGE;
                 TagRename("FactoryDisplay", display);
             }
-
 
             foreach (var oreDisplay in oreDisplays)
             {
@@ -322,6 +357,13 @@ MaxStack=5000
 
             UpdateResourceDisplays();
             TakeAmmoInventory();
+
+            if (ingotStorage.Count > 0)
+                ClearRefineries();
+
+            if (outputStorage.Count > 0)
+                ClearAssemblers();
+
             sb.Clear();
         }
 
@@ -583,6 +625,35 @@ MaxStack=5000
                     }
                 }
             }
+        }
+
+        private void TransferInventory(IMyInventory src, IEnumerable<IMyInventory> dests)
+        {
+            bool transferred = false;
+            workingItems.Clear();
+            src.GetItems(workingItems);
+            foreach (var item in workingItems)
+            {
+                foreach (var dest in dests)
+                {
+                    transferred = src.TransferItemTo(dest, item);
+                    if (transferred) break;
+                }
+            }
+        }
+
+        private void ClearRefineries()
+        {
+            var ingotInventories = ingotStorage.Select(ins => ins.GetInventory(0));
+            foreach (var refinery in refineries)
+                TransferInventory(refinery.OutputInventory, ingotInventories);
+        }
+
+        private void ClearAssemblers()
+        {
+            var storageInventories = outputStorage.Select(ous => ous.GetInventory(0));
+            foreach (var assembler in assemblers)
+                TransferInventory(assembler.OutputInventory, storageInventories);
         }
     }
 }
