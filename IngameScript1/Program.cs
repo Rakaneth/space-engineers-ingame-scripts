@@ -46,7 +46,7 @@ namespace IngameScript
         List<IMyRefinery> refineries = new List<IMyRefinery>();
         List<MyInventoryItem> workingItems = new List<MyInventoryItem>();
         MyFixedPoint maxStack;
-        const string V = "2.16";
+        const string V = "2.17";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
 Canvas=0
@@ -86,6 +86,11 @@ S10Ammo=0
 S10EAmmo=0
 S20AAmmo=0
 C100Ammo=0
+ArtilleryShell=0
+AssaultCannonShell=0
+AutoCannonShell=0
+LargeRailgunSabot=0
+SmallRailgunSabot=0
 
 [Config]
 MaxStack=5000

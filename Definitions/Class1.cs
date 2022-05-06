@@ -97,7 +97,7 @@ namespace IngameScript
             public readonly MyItemType wolfram; //MWI mod
 
             public readonly MyItemType bigNato = new MyItemType(ammoBase, "NATO_25x184mm");
-            //public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
+            public readonly MyItemType smallNato = new MyItemType(ammoBase, "NATO_5p56x45mm");
             public readonly MyItemType missile = new MyItemType(ammoBase, "Missile200mm");
             public readonly MyItemType mr8P = new MyItemType(ammoBase, "PreciseAutomaticRifleGun_Mag_5rd");
             public readonly MyItemType mr30E = new MyItemType(ammoBase, "UltimateAutomaticRifleGun_Mag_30rd");
@@ -109,6 +109,11 @@ namespace IngameScript
             public readonly MyItemType s10E = new MyItemType(ammoBase, "ElitePistolMagazine");
             public readonly MyItemType s20A = new MyItemType(ammoBase, "FullAutoPistolMagazine");
             public readonly MyItemType c100 = new MyItemType(ammoBase, "C100mmAmmo");
+            public readonly MyItemType artilleryShell = new MyItemType(ammoBase, "LargeCalibreAmmo");
+            public readonly MyItemType assaultCannonShell = new MyItemType(ammoBase, "MediumCalibreAmmo");
+            public readonly MyItemType autoCannonMagazine = new MyItemType(ammoBase, "AutocannonClip");
+            public readonly MyItemType largeRailgunSabot = new MyItemType(ammoBase, "LargeRailgunAmmo");
+            public readonly MyItemType smallRailgunSabot = new MyItemType(ammoBase, "SmallRailgunAmmo");
 
             public readonly MyDefinitionId bigNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_25x184mmMagazine");
             public readonly MyDefinitionId smallNatoBP = MyDefinitionId.Parse($"{bpBase}/NATO_5p56x45mmMagazine");
@@ -154,7 +159,11 @@ namespace IngameScript
             public readonly MyDefinitionId s10EMagBP = MyDefinitionId.Parse($"{bpBase}/ElitePistolMagazine");
             public readonly MyDefinitionId s20AMagBP = MyDefinitionId.Parse($"{bpBase}/FullAutoPistolMagazine");
             public readonly MyDefinitionId c100BP = MyDefinitionId.Parse($"{bpBase}/C100mmAmmo");
-
+            public readonly MyDefinitionId artilleryShellBP = MyDefinitionId.Parse($"{bpBase}/LargeCalibreAmmo");
+            public readonly MyDefinitionId assaultShellBP = MyDefinitionId.Parse($"{bpBase}/MediumCalibreAmmo");
+            public readonly MyDefinitionId autoCannonShellBP = MyDefinitionId.Parse($"{bpBase}/AutocannonClip");
+            public readonly MyDefinitionId largeRailgunSabotBP = MyDefinitionId.Parse($"{bpBase}/LargeRailgunAmmo");
+            public readonly MyDefinitionId smallRailgunSabotBP = MyDefinitionId.Parse($"{bpBase}/SmallRailgunAmmo");
 
             private readonly Dictionary<string, ItemInfo> defTable = new Dictionary<string, ItemInfo>();
 
@@ -181,7 +190,7 @@ namespace IngameScript
                 defTable.Add("SolarCell", new ItemInfo(solarCell, solarCellBP));
                 defTable.Add("SteelPlate", new ItemInfo(steelPlate, steelPlateBP));
                 defTable.Add("BigNato", new ItemInfo(bigNato, bigNatoBP));
-                //defTable.Add("SmallNato", new ItemInfo(smallNato, smallNatoBP));
+                defTable.Add("SmallNato", new ItemInfo(smallNato, smallNatoBP));
                 defTable.Add("Superconductor", new ItemInfo(superConductor, superConductorBP));
                 defTable.Add("ThrusterComp", new ItemInfo(thrusterComp, thrusterBP));
                 defTable.Add("Ice", new ItemInfo(ice, new MyDefinitionId()));
@@ -200,6 +209,11 @@ namespace IngameScript
                 defTable.Add("S10EAmmo", new ItemInfo(s10E, s10EMagBP));
                 defTable.Add("S20AAmmo", new ItemInfo(s20A, s20AMagBP));
                 defTable.Add("C100Ammo", new ItemInfo(c100, c100BP));
+                defTable.Add("ArtilleryShell", new ItemInfo(artilleryShell, artilleryShellBP));
+                defTable.Add("AssaultCannonShell", new ItemInfo(assaultCannonShell, artilleryShellBP));
+                defTable.Add("AutoCannonShell", new ItemInfo(autoCannonMagazine, autoCannonShellBP));
+                defTable.Add("LargeRailgunSabot", new ItemInfo(largeRailgunSabot, largeRailgunSabotBP));
+                defTable.Add("SmallRailgunSabot", new ItemInfo(smallRailgunSabot, smallRailgunSabotBP));
 
                 //mod blocks
                 //Concrete Mod

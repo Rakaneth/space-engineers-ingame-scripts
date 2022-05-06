@@ -55,10 +55,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JumpDriveInfo", "JumpDriveI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteCommand", "RemoteCommand\RemoteCommand.csproj", "{014D5712-EF99-46A1-A140-8FF827A19D5D}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PID", "PID\PID.shproj", "{5D709075-5D0B-43D2-ABB7-FB337DF96062}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
 		DisplayUtils\DisplayUtils.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
+		PID\PID.projitems*{5d709075-5d0b-43d2-abb7-fb337df96062}*SharedItemsImports = 13
 		Definitions\Definitions.projitems*{61eba249-19f3-48b6-a25b-a4cee90168ba}*SharedItemsImports = 13
 		Definitions\Definitions.projitems*{676b2ac1-6aa7-4493-86da-6d2bee4e528f}*SharedItemsImports = 4
 		Definitions\Definitions.projitems*{6e7fcefc-9535-4bd7-a988-6a6114ff4f07}*SharedItemsImports = 4

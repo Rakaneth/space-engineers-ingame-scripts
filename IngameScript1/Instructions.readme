@@ -1,4 +1,5 @@
-﻿Rakaneth's AutoAssembler v2.16
+﻿Rakaneth's AutoAssembler v2.17
+Updated 2022-5-6
 -----------
 
 -Use the following INI template for the programmable block's custom data.
@@ -13,6 +14,8 @@ block itself.
 -Add [IngotDisplay] to the custom data of any LCDs that should display ingot resources.
 -Add [OreDisplay] to the custom data of any LCDs that should display ore resources.
 -Add [AmmoDisplay] to the custom data of any LCDs that should display ammo.
+-Add [IngotStorage] to the custom data of any containers that should store ingots.
+-Add [OutputStorage] to the custom data of any containers that should store assembler output.
 -Run the script manually with "setup stocks" when stock amounts are changed.
 -Run the script manually with "setup blocks" when block configurations (assemblers,
 LCDs) are changed.
@@ -68,6 +71,11 @@ S10Ammo=0
 S10EAmmo=0
 S20AAmmo=0
 C100Ammo=0
+ArtilleryShell=0
+AssaultCannonShell=0
+AutoCannonShell=0
+LargeRailgunSabot=0
+SmallRailgunSabot=0
 
 [Config]
 MaxStack=5000
