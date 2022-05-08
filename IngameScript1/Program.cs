@@ -71,8 +71,6 @@ SteelPlate=0
 BigNato=0
 ThrusterComp=0
 Superconductor=0
-Wolfram40mmMod=0
-ConcreteMod=0
 HydrogenBottle=0
 OxygenBottle=0
 EliteWelder=0
@@ -85,7 +83,6 @@ MR8PAmmo=0
 S10Ammo=0
 S10EAmmo=0
 S20AAmmo=0
-C100Ammo=0
 ArtilleryShell=0
 AssaultCannonShell=0
 AutoCannonShell=0
@@ -138,10 +135,15 @@ MaxStack=5000
             MyIniParseResult result;
 
             if (!ini.TryParse(Me.CustomData, out result))
+            {
+                Echo("Config file failed to parse");
                 throw new Exception(result.ToString());
+            }
             else
+            {
                 Echo("Config file parsed");
-
+            }
+            
             var iniKeys = new List<MyIniKey>();
             ini.GetKeys("Stocks", iniKeys);
 
@@ -261,20 +263,24 @@ MaxStack=5000
             sb.AppendLine($"Rakaneth's AutoAssembler v{V}");
             sb.AppendLine("------------------------------");
 
+            Echo("Processing Args");
             if (arg == "setup stocks")
             {
+                Echo("Updating stocks");
                 UpdateStocks();
                 return;
             }
 
             if (arg == "setup blocks")
             {
+                Echo("Updating blocks");
                 UpdateBlocks();
                 return;
             }
 
             if (arg == "reset")
             {
+                Echo("Resetting custom data");
                 Reset();
                 return;
             }
@@ -288,19 +294,25 @@ MaxStack=5000
 
             if (arg == "defs")
             {
+                Echo("Displaying defs");
                 ShowDefs();
                 return;
             }
 
             if (arg == "sort")
             {
+                Echo("Sorting");
                 SortInventories();
                 return;
             }
 
+            Echo("Updating In Production Info");
+
             var prodString = inProduction.Count > 0 ? string.Join(", ", inProduction.ToArray()) : "Nothing";
             //Echo($"In Production: {prodString}");
             sb.AppendLine($"In Production: {prodString}");
+
+            Echo("Queueing items");
             var items = table.Keys.ToList();
             MyFixedPoint amt = 0;
             //int remainder = 0;
@@ -308,8 +320,16 @@ MaxStack=5000
             {
                 var itemID = items[i];
                 MyFixedPoint minimum = table[itemID];
+                Echo($"Processing {itemID}({minimum})");
+
+                if (minimum <= 0)
+                {
+                    continue;
+                }
+                
                 var thing = defs.GetDefinitionId(itemID);
                 var item = defs.GetItemType(itemID);
+
                 foreach (var inventory in inventories)
                 {
                     for (int j = 0; j < inventory.InventoryCount; j++)
@@ -331,6 +351,7 @@ MaxStack=5000
                         var alreadyQueued = HowManyQueued(thing, assemblers);
                         //Echo($"{toQueue} {itemID} to go");
                         sb.AppendLine($"{itemID}: {amt} / {minimum} Queued: {alreadyQueued}");
+                        if (alreadyQueued >= minimum) continue;
                         if (amt + alreadyQueued < minimum)
                         {
                             divideAndQueue(thing, minimum - alreadyQueued - amt, assemblers);
@@ -576,20 +597,27 @@ MaxStack=5000
             if (ammoDisplays.Count > 0)
             {
                 gunSB.Clear();
-                foreach (var gun in guns)
+                if (guns.Count > 0)
                 {
-                    gunSB.AppendLine(gun.CustomName);
-                    gunSB.AppendLine("-------------------");
-                    for (int i = 0; i < gun.InventoryCount; i++)
+                    foreach (var gun in guns)
                     {
-                        var g = gun.GetInventory(i);
-                        for (int j = 0; j < g.ItemCount; j++)
+                        gunSB.AppendLine(gun.CustomName);
+                        gunSB.AppendLine("-------------------");
+                        for (int i = 0; i < gun.InventoryCount; i++)
                         {
-                            var item = g.GetItemAt(j);
-                            gunSB.AppendLine($"{item.Value.Type.SubtypeId}: {item.Value.Amount}");
+                            var g = gun.GetInventory(i);
+                            for (int j = 0; j < g.ItemCount; j++)
+                            {
+                                var item = g.GetItemAt(j);
+                                gunSB.AppendLine($"{item.Value.Type.SubtypeId}: {item.Value.Amount}");
+                            }
+                            gunSB.AppendLine();
                         }
-                        gunSB.AppendLine();
                     }
+                }
+                else
+                {
+                    gunSB.AppendLine("No Guns!");
                 }
 
                 foreach (var ad in ammoDisplays)

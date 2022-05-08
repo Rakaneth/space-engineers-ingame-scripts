@@ -1,5 +1,5 @@
 ﻿Rakaneth's AutoAssembler v2.17
-Updated 2022-5-6
+Updated 2022-5-8
 -----------
 
 -Use the following INI template for the programmable block's custom data.
@@ -57,7 +57,6 @@ BigNato=0
 SmallNato=0
 ThrusterComp=0
 Superconductor=0
-Wolfram40mmMod=0
 HydrogenBottle=0
 OxygenBottle=0
 EliteWelder=0
@@ -70,7 +69,6 @@ MR8PAmmo=0
 S10Ammo=0
 S10EAmmo=0
 S20AAmmo=0
-C100Ammo=0
 ArtilleryShell=0
 AssaultCannonShell=0
 AutoCannonShell=0

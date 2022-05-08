@@ -158,7 +158,6 @@ namespace IngameScript
             public readonly MyDefinitionId s10MagBP = MyDefinitionId.Parse($"{bpBase}/SemiAutoPistolMagazine");
             public readonly MyDefinitionId s10EMagBP = MyDefinitionId.Parse($"{bpBase}/ElitePistolMagazine");
             public readonly MyDefinitionId s20AMagBP = MyDefinitionId.Parse($"{bpBase}/FullAutoPistolMagazine");
-            public readonly MyDefinitionId c100BP = MyDefinitionId.Parse($"{bpBase}/C100mmAmmo");
             public readonly MyDefinitionId artilleryShellBP = MyDefinitionId.Parse($"{bpBase}/LargeCalibreAmmo");
             public readonly MyDefinitionId assaultShellBP = MyDefinitionId.Parse($"{bpBase}/MediumCalibreAmmo");
             public readonly MyDefinitionId autoCannonShellBP = MyDefinitionId.Parse($"{bpBase}/AutocannonClip");
@@ -208,27 +207,11 @@ namespace IngameScript
                 defTable.Add("S10Ammo", new ItemInfo(s10, s10MagBP));
                 defTable.Add("S10EAmmo", new ItemInfo(s10E, s10EMagBP));
                 defTable.Add("S20AAmmo", new ItemInfo(s20A, s20AMagBP));
-                defTable.Add("C100Ammo", new ItemInfo(c100, c100BP));
                 defTable.Add("ArtilleryShell", new ItemInfo(artilleryShell, artilleryShellBP));
                 defTable.Add("AssaultCannonShell", new ItemInfo(assaultCannonShell, artilleryShellBP));
                 defTable.Add("AutoCannonShell", new ItemInfo(autoCannonMagazine, autoCannonShellBP));
                 defTable.Add("LargeRailgunSabot", new ItemInfo(largeRailgunSabot, largeRailgunSabotBP));
                 defTable.Add("SmallRailgunSabot", new ItemInfo(smallRailgunSabot, smallRailgunSabotBP));
-
-                //mod blocks
-                //Concrete Mod
-                if (MyDefinitionId.TryParse($"{bpBase}/ConcreteComponent", out concreteBP))
-                {
-                    concrete = new MyItemType(compBase, "Concrete");
-                    defTable.Add("ConcreteMod", new ItemInfo(concrete, concreteBP));
-                }
-
-                //MWI mod
-                if (MyDefinitionId.TryParse($"{bpBase}/WolfSlug40mm_Blueprint", out wolframBP))
-                {
-                    wolfram = new MyItemType(ammoBase, "WolfSlug40mm");
-                    defTable.Add("Wolfram40mmMod", new ItemInfo(wolfram, wolframBP));
-                }
             }
 
             public MyItemType GetItemType(string id) => defTable[id].ItemType;
