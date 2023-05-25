@@ -46,6 +46,7 @@ namespace IngameScript
         List<IMyRefinery> refineries = new List<IMyRefinery>();
         List<MyInventoryItem> workingItems = new List<MyInventoryItem>();
         MyFixedPoint maxStack;
+        bool debug = false;
         const string V = "2.17";
         const string defaultData = @"[Stocks]
 BulletproofGlass=0
@@ -118,6 +119,11 @@ MaxStack=5000
 
         }
 
+        private void debugEcho(string txt)
+        {
+            if (debug) Echo(txt);
+        }
+
         public void Save()
         {
             Storage = Me.CustomData;
@@ -150,7 +156,7 @@ MaxStack=5000
             for (int i = 0; i < iniKeys.Count; i++)
             {
                 var key = iniKeys[i];
-                Echo(key.ToString());
+                debugEcho(key.ToString());
                 table[key.Name] = ini.Get(key).ToInt32();
             }
             maxStack = ini.Get("Config", "MaxStack").ToInt32();
@@ -263,24 +269,24 @@ MaxStack=5000
             sb.AppendLine($"Rakaneth's AutoAssembler v{V}");
             sb.AppendLine("------------------------------");
 
-            Echo("Processing Args");
+            debugEcho("Processing Args");
             if (arg == "setup stocks")
             {
-                Echo("Updating stocks");
+                debugEcho("Updating stocks");
                 UpdateStocks();
                 return;
             }
 
             if (arg == "setup blocks")
             {
-                Echo("Updating blocks");
+                debugEcho("Updating blocks");
                 UpdateBlocks();
                 return;
             }
 
             if (arg == "reset")
             {
-                Echo("Resetting custom data");
+                debugEcho("Resetting custom data");
                 Reset();
                 return;
             }
@@ -288,31 +294,31 @@ MaxStack=5000
             if (arg == "clear")
             {
                 ClearAllQueues();
-                Echo("All assembler queues cleared.");
+                debugEcho("All assembler queues cleared.");
                 return;
             }
 
             if (arg == "defs")
             {
-                Echo("Displaying defs");
+                debugEcho("Displaying defs");
                 ShowDefs();
                 return;
             }
 
             if (arg == "sort")
             {
-                Echo("Sorting");
+                debugEcho("Sorting");
                 SortInventories();
                 return;
             }
 
-            Echo("Updating In Production Info");
+            debugEcho("Updating In Production Info");
 
             var prodString = inProduction.Count > 0 ? string.Join(", ", inProduction.ToArray()) : "Nothing";
             //Echo($"In Production: {prodString}");
             sb.AppendLine($"In Production: {prodString}");
 
-            Echo("Queueing items");
+            debugEcho("Queueing items");
             var items = table.Keys.ToList();
             MyFixedPoint amt = 0;
             //int remainder = 0;
@@ -320,7 +326,7 @@ MaxStack=5000
             {
                 var itemID = items[i];
                 MyFixedPoint minimum = table[itemID];
-                Echo($"Processing {itemID}({minimum})");
+                debugEcho($"Processing {itemID}({minimum})");
 
                 if (minimum <= 0)
                 {
@@ -577,7 +583,6 @@ MaxStack=5000
                 for (int i = 0; i < inventory.InventoryCount; i++)
                 {
                     var inv = inventory.GetInventory(i);
-
                     for (int j = 0; j < inv.ItemCount; j++)
                     {
                         var item = inv.GetItemAt(j);
@@ -636,7 +641,7 @@ MaxStack=5000
                 }
             }
             var endSortTime = DateTime.Now;
-            Echo($"Sort completed in {endSortTime.Subtract(startSortTime).TotalMilliseconds} ms");
+            debugEcho($"Sort completed in {endSortTime.Subtract(startSortTime).TotalMilliseconds} ms");
         }
 
         private void StackInventory(IMyInventory inv)
