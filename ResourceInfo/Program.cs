@@ -26,6 +26,7 @@ namespace IngameScript
         List<IMyTextPanel> panels = new List<IMyTextPanel>();
         StringBuilder sb = new StringBuilder();
         Definitions defs = new Definitions();
+        CommonFunctions utils = new CommonFunctions();
 
 
         public Program()
@@ -37,7 +38,14 @@ namespace IngameScript
                 throw new Exception("Remember to add [ResourceDisplay] to the Custom Data of connected displays");
 
             foreach (var panel in panels)
+            {
                 panel.Font = "Monospace";
+                panel.ContentType = ContentType.TEXT_AND_IMAGE;
+                utils.TagBlock("ResourceInfo", panel);
+            }
+
+            utils.TagBlock("ResourceInfo", Me);
+            utils.PBDisplay("Resource Info Display", Me);
 
             Runtime.UpdateFrequency = UpdateFrequency.Update100;
         }

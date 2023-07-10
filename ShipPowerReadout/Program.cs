@@ -24,6 +24,7 @@ namespace IngameScript
     {
         List<IMyPowerProducer> producers = new List<IMyPowerProducer>();
         List<IMyGasTank> tanks = new List<IMyGasTank>();
+        List<IMyGasTank> smallTanks = new List<IMyGasTank>();
         List<IMyGasTank> oxyTanks = new List<IMyGasTank>();
         //StringBuilder sb = new StringBuilder();
         List<IMyTextPanel> displays = new List<IMyTextPanel>();
@@ -43,6 +44,9 @@ namespace IngameScript
         MyResourceSinkComponent sink;
         const char bar = '\u2588';
         const char dash = '-';
+        const float LG_H2_MAX = 15000000f;
+        const float SM_H2_MAX = 1000000f;
+        const float OXY_MAX = 100000f;
         IMyProgrammableBlock displayController;
         MyIni ini;
 
@@ -50,11 +54,12 @@ namespace IngameScript
         {
             int bars;
             GridTerminalSystem.GetBlocksOfType(producers, p => p.IsSameConstructAs(Me) && !(p is IMyBatteryBlock));
-            GridTerminalSystem.GetBlocksOfType(tanks, e => e.IsSameConstructAs(Me) && e.Capacity == 15000000f);
+            GridTerminalSystem.GetBlocksOfType(tanks, e => e.IsSameConstructAs(Me) && e.Capacity == LG_H2_MAX);
+            GridTerminalSystem.GetBlocksOfType(smallTanks, e => e.IsSameConstructAs(Me) && e.Capacity == SM_H2_MAX);
             GridTerminalSystem.GetBlocksOfType(batts, b => b.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(displays, display => MyIni.HasSection(display.CustomData, "PowerReadout") && display.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(cockpits, cockpit => MyIni.HasSection(cockpit.CustomData, "PowerReadout") && cockpit.IsSameConstructAs(Me));
-            GridTerminalSystem.GetBlocksOfType(oxyTanks, o => o.IsSameConstructAs(Me) && o.Capacity == 100000f);
+            GridTerminalSystem.GetBlocksOfType(oxyTanks, o => o.IsSameConstructAs(Me) && o.Capacity == OXY_MAX);
             GridTerminalSystem.GetBlocksOfType(reactors, r => r.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(battDisplays, bd => MyIni.HasSection(bd.CustomData, "BatteryInfo") && bd.IsSameConstructAs(Me));
             GridTerminalSystem.GetBlocksOfType(h2Displays, h2 => MyIni.HasSection(h2.CustomData, "H2Info") && h2.IsSameConstructAs(Me));
@@ -122,11 +127,21 @@ namespace IngameScript
             var smReact = reactors.Count(e => e.MaxOutput == 15f);
             var lgReact = reactors.Count(e => e.MaxOutput == 300f);
             Echo($"Batteries: {batts.Count}");
-            Echo($"Hydrogen Tanks: {tanks.Count}");
+            Echo($"Hydrogen Tanks: {tanks.Count + smallTanks.Count}");
+            Echo($"--Small H2 Tanks: {smallTanks.Count}");
+            Echo($"--Large H2 Tanks: {tanks.Count}");
             Echo($"Oxygen Tanks: {oxyTanks.Count}");
             Echo($"Reactors: {reactors.Count}");
             Echo($"--Small Reactors: {smReact}");
             Echo($"--Large Reactors: {lgReact}");
+
+            if (!Me.CustomName.Contains("PowerReadout")) {
+                Me.CustomName += " [PowerReadout]";
+            }
+
+            var myLCD = Me.GetSurface(0);
+            myLCD.ContentType = ContentType.TEXT_AND_IMAGE;
+            myLCD.WriteText("Power Readout");
         }
 
         public void Main(string argument, UpdateType updateSource)
@@ -139,6 +154,7 @@ namespace IngameScript
             float used = 0;
             double h2Current = 0;
             double o2Current = 0;
+            double h2Max = 0;
             MyFixedPoint uStored = 0;
 
             AddDisplayList("Power Sources\n", displays, producerDisplays);
@@ -190,20 +206,30 @@ namespace IngameScript
                 AddDisplayList($" {battStored / battMaxStored * 100:N2}% full\n\n", displays, battDisplays);
             }
 
-            if (tanks.Count > 0)
+            if (tanks.Count + smallTanks.Count > 0)
             {
                 AddDisplayList("Hydrogen\n", displays, h2Displays);
 
                 foreach (var tank in tanks)
                 {
-                    h2Current += tank.FilledRatio;
+                    h2Current += tank.FilledRatio * LG_H2_MAX;
+                    h2Max += LG_H2_MAX;
                     AddDisplayList($"{tank.CustomName}: {tank.FilledRatio * 100:N2}%", h2Displays);
                     AddBarList(tank.FilledRatio, 1, h2Displays);
                     AddDisplayList($"\n", h2Displays);
                 }
 
-                AddDisplayList($"Total Hydrogen Reserves: {(h2Current * 100 / tanks.Count):N2}%", displays, h2Displays);
-                AddBarList(h2Current, tanks.Count, displays, h2Displays);
+                foreach (var smTank in smallTanks)
+                {
+                    h2Current += smTank.FilledRatio * SM_H2_MAX;
+                    h2Max += SM_H2_MAX;
+                    AddDisplayList($"{smTank.CustomName}: {smTank.FilledRatio * 100:N2}%", h2Displays);
+                    AddBarList(smTank.FilledRatio, 1, h2Displays);
+                    AddDisplayList($"\n", h2Displays);
+                }
+
+                AddDisplayList($"Total Hydrogen Reserves: {(h2Current * 100 / h2Max):N2}%", displays, h2Displays);
+                AddBarList(h2Current, h2Max, displays, h2Displays);
                 AddDisplayList("\n\n", displays, h2Displays);
             }
 

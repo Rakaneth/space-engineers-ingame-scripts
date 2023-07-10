@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblerManager", "IngameScript1\AssemblerManager.csproj", "{6E7FCEFC-9535-4BD7-A988-6A6114FF4F07}"
 EndProject
@@ -57,22 +57,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteCommand", "RemoteComm
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PID", "PID\PID.shproj", "{5D709075-5D0B-43D2-ABB7-FB337DF96062}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "CommonFunctions", "CommonFunctions\CommonFunctions.shproj", "{A8D0C70E-CCD2-4069-B0AE-BC0E714B5A3B}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
-		DisplayUtils\DisplayUtils.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
-		PID\PID.projitems*{5d709075-5d0b-43d2-abb7-fb337df96062}*SharedItemsImports = 13
-		Definitions\Definitions.projitems*{61eba249-19f3-48b6-a25b-a4cee90168ba}*SharedItemsImports = 13
-		Definitions\Definitions.projitems*{676b2ac1-6aa7-4493-86da-6d2bee4e528f}*SharedItemsImports = 4
-		Definitions\Definitions.projitems*{6e7fcefc-9535-4bd7-a988-6a6114ff4f07}*SharedItemsImports = 4
-		DisplayUtils\DisplayUtils.projitems*{7fa65dcf-2726-471f-8563-cfc53d529f1b}*SharedItemsImports = 13
-		DisplayUtils\DisplayUtils.projitems*{93208769-ac73-4299-a6a3-1c64cd05b5b2}*SharedItemsImports = 4
-		DroneCommands\DroneCommands.projitems*{bccec4b9-c578-4522-a809-b1a05a9e359f}*SharedItemsImports = 13
-		DroneCommands\DroneCommands.projitems*{f0a11506-1b5f-4356-a560-4764b9077646}*SharedItemsImports = 4
-		DroneCommands\DroneCommands.projitems*{f0b901d4-af77-4a81-a4e0-f5160088d2d2}*SharedItemsImports = 4
-		Definitions\Definitions.projitems*{fc0918f9-d979-4e26-a640-ab160393bc19}*SharedItemsImports = 4
-		Definitions\Definitions.projitems*{fd5c7c60-3c01-4a80-a640-aa3a68a364a5}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 	EndGlobalSection
@@ -129,5 +116,22 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B3F1F87-3264-4B62-A992-143D64A11000}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Definitions\Definitions.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
+		DisplayUtils\DisplayUtils.projitems*{52e39047-b322-4f2d-9851-3c769c3cff62}*SharedItemsImports = 4
+		PID\PID.projitems*{5d709075-5d0b-43d2-abb7-fb337df96062}*SharedItemsImports = 13
+		Definitions\Definitions.projitems*{61eba249-19f3-48b6-a25b-a4cee90168ba}*SharedItemsImports = 13
+		CommonFunctions\CommonFunctions.projitems*{676b2ac1-6aa7-4493-86da-6d2bee4e528f}*SharedItemsImports = 4
+		Definitions\Definitions.projitems*{676b2ac1-6aa7-4493-86da-6d2bee4e528f}*SharedItemsImports = 4
+		Definitions\Definitions.projitems*{6e7fcefc-9535-4bd7-a988-6a6114ff4f07}*SharedItemsImports = 4
+		DisplayUtils\DisplayUtils.projitems*{7fa65dcf-2726-471f-8563-cfc53d529f1b}*SharedItemsImports = 13
+		DisplayUtils\DisplayUtils.projitems*{93208769-ac73-4299-a6a3-1c64cd05b5b2}*SharedItemsImports = 4
+		CommonFunctions\CommonFunctions.projitems*{a8d0c70e-ccd2-4069-b0ae-bc0e714b5a3b}*SharedItemsImports = 13
+		DroneCommands\DroneCommands.projitems*{bccec4b9-c578-4522-a809-b1a05a9e359f}*SharedItemsImports = 13
+		DroneCommands\DroneCommands.projitems*{f0a11506-1b5f-4356-a560-4764b9077646}*SharedItemsImports = 4
+		DroneCommands\DroneCommands.projitems*{f0b901d4-af77-4a81-a4e0-f5160088d2d2}*SharedItemsImports = 4
+		Definitions\Definitions.projitems*{fc0918f9-d979-4e26-a640-ab160393bc19}*SharedItemsImports = 4
+		Definitions\Definitions.projitems*{fd5c7c60-3c01-4a80-a640-aa3a68a364a5}*SharedItemsImports = 4
 	EndGlobalSection
 EndGlobal
